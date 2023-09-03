@@ -1,7 +1,7 @@
 package io.github.dutianze.memo.controller;
 
-import io.github.dutianze.memo.entity.Note;
-import io.github.dutianze.memo.service.UserService;
+import io.github.dutianze.memo.entity.Post;
+import io.github.dutianze.memo.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,35 +22,35 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2023/8/11
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/notes")
 @RequiredArgsConstructor
-public class NoteController {
+public class PostController {
 
-  private final UserService userService;
+  private final PostService postService;
 
   @PostMapping
-  public ResponseEntity<Note> addUser(@RequestBody Note user) {
+  public ResponseEntity<Post> addNote(@RequestBody Post note) {
     try {
-      Note addedUser = userService.addUser(user);
-      return ResponseEntity.status(HttpStatus.CREATED).body(addedUser);
+      Post addedNote = postService.addNote(note);
+      return ResponseEntity.status(HttpStatus.CREATED).body(addedNote);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
   }
 
   @GetMapping("/{id}")
-  public Note getUser(@PathVariable String id) {
-    return userService.getUserById(id);
+  public Post getUser(@PathVariable String id) {
+    return postService.getNoteById(id);
   }
 
   @PutMapping("/{id}")
-  public Note updateUser(@PathVariable String id, @RequestBody Note user) {
-    return userService.updateUser(id, user);
+  public Post updateUser(@PathVariable String id, @RequestBody Post user) {
+    return postService.updateNote(id, user);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-    boolean deleted = userService.deleteUser(id);
+    boolean deleted = postService.deleteNote(id);
     if (deleted) {
       return ResponseEntity.noContent().build();
     } else {
@@ -59,7 +59,7 @@ public class NoteController {
   }
 
   @GetMapping
-  public List<Note> getAllUsers() {
-    return userService.getAllUsers();
+  public List<Post> getAllUsers() {
+    return postService.getAllNotes();
   }
 }

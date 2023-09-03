@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Button,
     Card,
@@ -27,44 +27,6 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 const Editor = dynamic(import("@/components/Editor"), { ssr: false });
-
-const mockdata = [
-    {
-        title: "Top 10 places to visit in Norway this summer",
-        image: "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "August 18, 2022",
-    },
-    {
-        title: "Best forests to visit in North America",
-        image: "https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "August 27, 2022",
-    },
-    {
-        title: "Hawaii beaches review: better than you think",
-        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "September 9, 2022",
-    },
-    {
-        title: "Mountains at night: 12 best locations to enjoy the view",
-        image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "September 12, 2022",
-    },
-    {
-        title: "Bx23",
-        image: "https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "August 27, 2022",
-    },
-    {
-        title: "Ha32134you think",
-        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "September 9, 2022",
-    },
-    {
-        title: "Moun34cations to enjoy the view",
-        image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80",
-        date: "September 12, 2022",
-    },
-];
 
 const useStyles = createStyles((theme, { floating }) => ({
     main: {
@@ -137,8 +99,12 @@ const useStyles = createStyles((theme, { floating }) => ({
 
 export default function HomePage() {
     const [title, setTitle] = useState("");
+    const [backgroundImage, setBackgroundImage] = useState("");
     const [content, setContent] = useState("");
     const [focused, setFocused] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [reload, setReload] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
     const [tags, setTags] = useState([
         { value: "react", label: "React" },
         { value: "ng", label: "Angular" },
@@ -148,11 +114,46 @@ export default function HomePage() {
         floating: title.trim().length !== 0 || focused,
     });
 
-    const cards = mockdata.map((article) => (
+    useEffect(() => {
+        setPosts([]);
+        fetch("http://localhost:8080/notes")
+            .then((response) => response.json())
+            .then((result) => {
+                setPosts(result);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }, [reload]);
+
+    useEffect(() => {
+        setIsEdit(title.length > 0);
+    }, [title]);
+
+    const saveHandler = () => {
+        fetch("http://localhost:8080/notes", {
+            method: "POST",
+            headers: {
+                accept: "*/*",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: title,
+                content: content,
+                backgroundImage: backgroundImage,
+            }),
+        });
+        setTitle("");
+        setContent("");
+        setBackgroundImage("");
+        setReload(!reload);
+    };
+
+    const cards = posts.map((post) => (
         <Card
             // withBorder
             shadow="sm"
-            key={article.title}
+            key={post.id}
             p="md"
             radius="md"
             component="a"
@@ -160,7 +161,7 @@ export default function HomePage() {
             className={classes.card}
         >
             <AspectRatio ratio={1920 / 1080}>
-                <Image src={article.image} />
+                <Image src={post.backgroundImage} />
             </AspectRatio>
             <Text
                 color="dimmed"
@@ -169,10 +170,10 @@ export default function HomePage() {
                 weight={700}
                 mt="md"
             >
-                {article.date}
+                {post.updateTime}
             </Text>
             <Text className={classes.title} mt={5}>
-                {article.title}
+                {post.title}
             </Text>
         </Card>
     ));
@@ -199,26 +200,37 @@ export default function HomePage() {
                     mt="md"
                     autoComplete="nope"
                 />
-                <Editor content={content} setContent={setContent} />
-                <MultiSelect
-                    data={tags}
-                    placeholder="选择标签"
-                    searchable
-                    creatable
-                    clearable
-                    getCreateLabel={(query) => `+ Create ${query}`}
-                    onCreate={(query) => {
-                        const item = { value: query, label: query };
-                        setTags((current) => [...current, item]);
-                        return item;
-                    }}
-                />
-                <Button
-                    className={classes.control}
-                    onClick={(values) => console.log(values)}
-                >
-                    保存
-                </Button>
+
+                {isEdit ? (
+                    <>
+                        <Editor
+                            content={content}
+                            setContent={setContent}
+                            backgroundImage={backgroundImage}
+                            setBackgroundImage={setBackgroundImage}
+                            setIsEdit={setIsEdit}
+                        />
+                        <MultiSelect
+                            data={tags}
+                            placeholder="选择标签"
+                            searchable
+                            creatable
+                            clearable
+                            getCreateLabel={(query) => `+ Create ${query}`}
+                            onCreate={(query) => {
+                                const item = { value: query, label: query };
+                                setTags((current) => [...current, item]);
+                                return item;
+                            }}
+                        />
+                        <Button
+                            className={classes.control}
+                            onClick={saveHandler}
+                        >
+                            保存
+                        </Button>
+                    </>
+                ) : undefined}
             </Group>
 
             <Group className={classes.content}>

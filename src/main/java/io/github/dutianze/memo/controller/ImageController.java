@@ -1,7 +1,7 @@
 package io.github.dutianze.memo.controller;
 
-import io.github.dutianze.memo.entity.NoteImage;
-import io.github.dutianze.memo.repository.NoteImageRepository;
+import io.github.dutianze.memo.entity.Image;
+import io.github.dutianze.memo.repository.ImageRepository;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,28 +26,30 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/image")
 @RequiredArgsConstructor
-public class NoteImageController {
+public class ImageController {
 
-  private final NoteImageRepository noteImageRepository;
-
+  private final ImageRepository imageRepository;
 
   @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public String handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+  public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile image)
+      throws IOException {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
-    Thumbnails.of(file.getInputStream())
-        .size(400, 400)
+    Thumbnails.of(image.getInputStream())
+        .size(500, 500)
         .outputFormat(MediaType.IMAGE_PNG.getSubtype())
         .toOutputStream(os);
-    NoteImage noteImage = new NoteImage(os.toByteArray());
-    NoteImage save = noteImageRepository.save(noteImage);
-    return save.getId();
+    Image noteImage = new Image(os.toByteArray());
+    Image saved = imageRepository.save(noteImage);
+    return ResponseEntity.ok().body(
+        saved.getURL("http://localhost:8080")
+    );
   }
 
   @GetMapping(value = "/{id}")
   public ResponseEntity<InputStreamResource> handleFileUpload(@PathVariable("id") String id) {
-    Optional<NoteImage> noteImageOptional = noteImageRepository.findById(id);
+    Optional<Image> noteImageOptional = imageRepository.findById(id);
     return noteImageOptional
-        .map(NoteImage::getImageData)
+        .map(Image::getImageData)
         .map(ByteArrayInputStream::new)
         .map(InputStreamResource::new)
         .map(streamResource -> ResponseEntity.ok()
