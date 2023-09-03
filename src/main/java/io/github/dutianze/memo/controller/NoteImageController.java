@@ -36,7 +36,7 @@ public class NoteImageController {
     ByteArrayOutputStream os = new ByteArrayOutputStream();
     Thumbnails.of(file.getInputStream())
         .size(400, 400)
-        .outputFormat("png")
+        .outputFormat(MediaType.IMAGE_PNG.getSubtype())
         .toOutputStream(os);
     NoteImage noteImage = new NoteImage(os.toByteArray());
     NoteImage save = noteImageRepository.save(noteImage);
