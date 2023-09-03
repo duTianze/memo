@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2023/9/3
  */
 @RestController
-@RequestMapping("/note-image")
+@RequestMapping("/api/image")
 @RequiredArgsConstructor
 public class NoteImageController {
 
@@ -43,7 +43,7 @@ public class NoteImageController {
     return save.getId();
   }
 
-  @GetMapping(value = "/image/{id}")
+  @GetMapping(value = "/{id}")
   public ResponseEntity<InputStreamResource> handleFileUpload(@PathVariable("id") String id) {
     Optional<NoteImage> noteImageOptional = noteImageRepository.findById(id);
     return noteImageOptional
