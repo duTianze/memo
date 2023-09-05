@@ -6,7 +6,7 @@ package io.github.dutianze.memo.exception;
  */
 public class NoteServiceException extends RuntimeException {
 
-  public NoteServiceException(String message) {
-    super(message);
-  }
+    public NoteServiceException(String message) {
+        super(message);
+    }
 }

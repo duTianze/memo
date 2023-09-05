@@ -1,14 +1,14 @@
 package io.github.dutianze.memo.repository;
 
-import io.github.dutianze.memo.entity.Post;
+import io.github.dutianze.memo.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author dutianze
- * @date 2023/8/11
+ * @date 2023/9/5
  */
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface TagRepository extends JpaRepository<Tag, Long> {
 
 }

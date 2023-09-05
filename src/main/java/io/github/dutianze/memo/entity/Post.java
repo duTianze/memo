@@ -1,60 +1,57 @@
 package io.github.dutianze.memo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import io.github.dutianze.memo.controller.PostDTO;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * @author dutianze
  * @date 2023/8/11
  */
 @Data
-@Entity(name = "Post")
-@Table(name = "post")
+@Entity
 @EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor
 public class Post {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column
-  private String title;
+    @Column
+    private String title;
 
-  @Column
-  private String backgroundImage;
+    @Column
+    private String backgroundImage;
 
-  @Column
-  private String content;
+    @Column
+    private String content;
 
-  @OneToMany(
-      mappedBy = "post",
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
-  )
-  private List<PostTag> tags = new ArrayList<>();
+    @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
 
-  @CreatedDate
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime createTime;
+    @LastModifiedDate
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 
-  @LastModifiedDate
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime updateTime;
+    public Post(PostDTO postDTO) {
+        this.title = postDTO.getTitle();
+        this.content = postDTO.getContent();
+        this.backgroundImage = postDTO.getBackgroundImage();
+    }
+
+    public List<PostTag> linkTag(List<Tag> tags) {
+        return tags.stream()
+                   .map(tag -> new PostTag(this, tag.getId()))
+                   .toList();
+    }
 }
