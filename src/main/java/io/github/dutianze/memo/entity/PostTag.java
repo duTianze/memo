@@ -2,12 +2,8 @@ package io.github.dutianze.memo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 /**
  * @author dutianze
@@ -15,9 +11,11 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-@EntityListeners(value = AuditingEntityListener.class)
+@Table(indexes = {@Index(name = "post_id_idx", columnList = "post_id"),
+                  @Index(name = "tag_id_idx", columnList = "tag_id")})
 @NoArgsConstructor
-public class PostTag {
+@EqualsAndHashCode(callSuper = false)
+public class PostTag extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,22 +24,19 @@ public class PostTag {
     @Column(name = "post_id", insertable = false, updatable = false)
     private Long postId;
 
-    @Column
+    @Column(name = "tag_id", insertable = false, updatable = false)
     private Long tagId;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @CreatedDate
-    private LocalDateTime createTime;
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
-    @LastModifiedDate
-    private LocalDateTime updateTime;
-
-
-    public PostTag(Post post, Long tagId) {
+    public PostTag(Post post, Tag tag) {
         this.post = post;
-        this.tagId = tagId;
+        this.tag = tag;
     }
 }

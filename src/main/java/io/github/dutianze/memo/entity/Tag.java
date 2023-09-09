@@ -1,14 +1,11 @@
 package io.github.dutianze.memo.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author dutianze
@@ -16,9 +13,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-@EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor
-public class Tag {
+@EqualsAndHashCode(callSuper = false)
+public class Tag extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,15 +24,13 @@ public class Tag {
     @Column
     private String name;
 
-    @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    public Tag(Long id) {
+        this.id = id;
+    }
 
-    @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
-
-    public Tag(String name) {
-        this.name = name;
+    public static Tag of(String name) {
+        Tag tag = new Tag();
+        tag.setName(name);
+        return tag;
     }
 }

@@ -2,7 +2,10 @@ package io.github.dutianze.memo.repository;
 
 import io.github.dutianze.memo.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author dutianze
@@ -10,5 +13,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
+
+    @Query("""
+            select tag
+            from PostTag postTag
+            left join Tag tag on tag.id = postTag.tagId
+            where postTag.postId = :postId
+            """)
+    List<Tag> findByPostId(Long postId);
 
 }

@@ -2,13 +2,9 @@ package io.github.dutianze.memo.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.unit.DataSize;
-
-import java.time.LocalDateTime;
 
 /**
  * @author dutianze
@@ -16,9 +12,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @Entity
-@EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor
-public class Image {
+@EqualsAndHashCode(callSuper = true)
+public class Image extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,12 +25,6 @@ public class Image {
 
     @Column(name = "image_data")
     private byte[] imageData;
-
-    @CreatedDate
-    private LocalDateTime createTime;
-
-    @LastModifiedDate
-    private LocalDateTime updateTime;
 
     public Image(byte[] imageData) {
         this.imageData = imageData;

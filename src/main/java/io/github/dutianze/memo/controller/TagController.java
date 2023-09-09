@@ -3,6 +3,8 @@ package io.github.dutianze.memo.controller;
 import io.github.dutianze.memo.entity.Tag;
 import io.github.dutianze.memo.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +23,17 @@ public class TagController {
     private final TagRepository tagRepository;
 
     @PostMapping
-    public ResponseEntity<Tag> addNote(@RequestParam String name) {
+    public ResponseEntity<Tag> addTag(@RequestParam String name) {
         try {
-            Tag tag = new Tag(name);
-            Tag addedTag = tagRepository.save(tag);
+            Tag addedTag = tagRepository.save(Tag.of(name));
             return ResponseEntity.status(HttpStatus.CREATED).body(addedTag);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @GetMapping("/{id}")
-    public Tag getTag(@PathVariable Long id) {
-        return tagRepository.findById(id).orElse(null);
-    }
-
     @GetMapping
-    public List<Tag> getAllTags() {
-        return tagRepository.findAll();
+    public List<Tag> getAllTags(@SortDefault(sort = "createdAt,desc") Sort sort) {
+        return tagRepository.findAll(sort);
     }
 }

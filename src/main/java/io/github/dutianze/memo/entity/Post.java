@@ -1,16 +1,10 @@
 package io.github.dutianze.memo.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.dutianze.memo.controller.PostDTO;
+import io.github.dutianze.memo.controller.dto.PostDTO;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author dutianze
@@ -18,9 +12,9 @@ import java.util.List;
  */
 @Data
 @Entity
-@EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor
-public class Post {
+@EqualsAndHashCode(callSuper = false)
+public class Post extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,23 +29,15 @@ public class Post {
     @Column
     private String content;
 
-    @CreatedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
-
-    @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
+    public Post(String title, String backgroundImage, String content) {
+        this.title = title;
+        this.backgroundImage = backgroundImage;
+        this.content = content;
+    }
 
     public Post(PostDTO postDTO) {
         this.title = postDTO.getTitle();
         this.content = postDTO.getContent();
         this.backgroundImage = postDTO.getBackgroundImage();
-    }
-
-    public List<PostTag> linkTag(List<Tag> tags) {
-        return tags.stream()
-                   .map(tag -> new PostTag(this, tag.getId()))
-                   .toList();
     }
 }
