@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class PostController {
     public Page<PostDTO> findPostDTOByTagId(@RequestParam(required = false)
                                             Long tagId,
                                             @ParameterObject
-                                            @PageableDefault(sort = "createdAt,desc")
+                                            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                             Pageable pageable) {
         if (Objects.isNull(tagId)) {
             Page<Post> posts = postRepository.findAll(pageable);

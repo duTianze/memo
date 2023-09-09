@@ -54,7 +54,7 @@ const useStyles = createStyles((theme, { floating }) => ({
     },
     card: {
         transition: "transform 150ms ease, box-shadow 150ms ease",
-
+        maxHeight: "200px",
         "&:hover": {
             transform: "scale(1.01)",
             boxShadow: theme.shadows.md,
@@ -116,10 +116,10 @@ export default function HomePage() {
 
     useEffect(() => {
         setPosts([]);
-        fetch("http://localhost:8080/notes")
+        fetch("http://localhost:8080/api/post/search")
             .then((response) => response.json())
             .then((result) => {
-                setPosts(result);
+                setPosts(result.content);
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -131,7 +131,7 @@ export default function HomePage() {
     }, [title]);
 
     const saveHandler = () => {
-        fetch("http://localhost:8080/notes", {
+        fetch("http://localhost:8080/api/post", {
             method: "POST",
             headers: {
                 accept: "*/*",
@@ -142,11 +142,12 @@ export default function HomePage() {
                 content: content,
                 backgroundImage: backgroundImage,
             }),
+        }).then((response) => {
+            setTitle("");
+            setContent("");
+            setBackgroundImage("");
+            setReload(!reload);
         });
-        setTitle("");
-        setContent("");
-        setBackgroundImage("");
-        setReload(!reload);
     };
 
     const cards = posts.map((post) => (
