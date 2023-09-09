@@ -35,7 +35,7 @@ const useStyles = createStyles((theme, { floating }) => ({
     },
     editor: {
         backgroundColor: theme.white,
-        padding: theme.spacing.xl,
+        padding: theme.spacing.sm,
         borderRadius: theme.radius.md,
         boxShadow: theme.shadows.lg,
         width: "100%",
@@ -64,6 +64,7 @@ const useStyles = createStyles((theme, { floating }) => ({
         fontFamily: `Greycliff CF, ${theme.fontFamily}`,
         fontWeight: 600,
     },
+
     root: {
         position: "relative",
         width: "100%",
