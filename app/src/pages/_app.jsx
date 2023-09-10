@@ -24,11 +24,18 @@ const useStyles = createStyles((theme) => {
 
 export default function App(props) {
     const { Component, pageProps } = props;
-    const [opened, setOpened] = useState(false);
+    const [navReload, setNavReload] = useState(false);
+    const [selectTag, setSelectTag] = useState("");
+    const [opened, setOpened] = useState(true);
     const { classes } = useStyles();
 
     return (
-        <GlobalContext.Provider value={{ navReload: false }}>
+        <GlobalContext.Provider
+            value={{
+                nav: [navReload, setNavReload],
+                tag: [selectTag, setSelectTag],
+            }}
+        >
             <AppShell
                 header={<Header opened={opened} setOpened={setOpened} />}
                 navbar={<Navbar opened={opened} />}

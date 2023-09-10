@@ -1,19 +1,23 @@
-import { useState, useEffect } from "react";
-import { Flex, Group, SimpleGrid } from "@mantine/core";
+import { useState, useEffect, useContext } from "react";
+import { Flex } from "@mantine/core";
 import ImageCard from "@/components/ImageCard";
 import MemoEditor from "@/components/MemoEditor";
 import useStyles from "./index.styles";
+import GlobalContext from "@/pages/global-context";
 
 export default function HomePage() {
     const [posts, setPosts] = useState([]);
     const { classes } = useStyles();
+    const {
+        tag: [selectTagId, setSelectTagId],
+    } = useContext(GlobalContext);
 
     useEffect(() => {
         loadPostHanlder();
-    }, []);
+    }, [selectTagId]);
 
     const loadPostHanlder = () => {
-        fetch("http://localhost:8080/api/post/search")
+        fetch(`http://localhost:8080/api/post/search?tagId=${selectTagId}`)
             .then((response) => response.json())
             .then((result) => {
                 setPosts(result.content);
@@ -34,27 +38,15 @@ export default function HomePage() {
             wrap="nowrap"
         >
             <MemoEditor loadPostHanlder={loadPostHanlder} />
-
-            <Group className={classes.content}>
-                <SimpleGrid
-                    className={classes.contentGrid}
-                    cols={5}
-                    breakpoints={[
-                        { maxWidth: "lg", cols: 4, spacing: "lg" },
-                        { maxWidth: "md", cols: 3, spacing: "md" },
-                        { maxWidth: "sm", cols: 2, spacing: "sm" },
-                        { maxWidth: "xs", cols: 1, spacing: "xs" },
-                    ]}
-                >
-                    {posts.map((post) => (
-                        <ImageCard
-                            key={post.id}
-                            image={post.image}
-                            title={post.title}
-                        />
-                    ))}
-                </SimpleGrid>
-            </Group>
+            <div className={classes.content}>
+                {posts.map((post) => (
+                    <ImageCard
+                        key={post.id}
+                        image={post.image}
+                        title={post.title}
+                    />
+                ))}
+            </div>
         </Flex>
     );
 }

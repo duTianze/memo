@@ -1,14 +1,31 @@
-import { createStyles, getStylesRef, rem } from "@mantine/core";
+import { createStyles, getStylesRef, rem, px } from "@mantine/core";
 
 export default createStyles((theme) => ({
     card: {
+        flex: "1 0 auto",
+        margin: "4px",
         position: "relative",
-        height: rem(280),
+        height: px(300),
+        maxWidth: px(500),
         backgroundColor: theme.colors.gray[0],
         [`&:hover .${getStylesRef("image")}`]: {
             transform: "scale(1.03)",
         },
         cursor: "pointer",
+        transition: "transform 150ms ease, box-shadow 150ms ease",
+        "&:hover": {
+            transform: "scale(1.05)",
+            boxShadow: theme.shadows.md,
+        },
+        [theme.fn.smallerThan("64em")]: {
+            maxWidth: px(350),
+        },
+        [theme.fn.smallerThan("sm")]: {
+            maxWidth: px(300),
+        },
+        [theme.fn.smallerThan("xs")]: {
+            maxWidth: px(500),
+        },
     },
 
     image: {

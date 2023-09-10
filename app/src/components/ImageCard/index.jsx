@@ -22,12 +22,12 @@ export default function ImageCard({ image, title }) {
             <div className={classes.overlay} />
             <div className={classes.content}>
                 <div>
-                    <Text size="lg" className={classes.title} weight={500}>
+                    <Text size="sm" className={classes.title} weight={500}>
                         {title}
                     </Text>
 
                     <Group position="apart" spacing="xs">
-                        <Text size="sm" className={classes.author}>
+                        <Text size="xs" className={classes.author}>
                             author
                         </Text>
 
@@ -38,7 +38,7 @@ export default function ImageCard({ image, title }) {
                                     stroke={1.5}
                                     color={theme.colors.dark[2]}
                                 />
-                                <Text size="sm" className={classes.bodyText}>
+                                <Text size="xs" className={classes.bodyText}>
                                     views
                                 </Text>
                             </Center>
@@ -48,7 +48,7 @@ export default function ImageCard({ image, title }) {
                                     stroke={1.5}
                                     color={theme.colors.dark[2]}
                                 />
-                                <Text size="sm" className={classes.bodyText}>
+                                <Text size="xs" className={classes.bodyText}>
                                     comments
                                 </Text>
                             </Center>

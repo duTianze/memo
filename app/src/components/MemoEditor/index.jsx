@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Button, MultiSelect, TextInput, Group } from "@mantine/core";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
+import GlobalContext from "@/pages/global-context";
 
 const Editor = dynamic(import("@/components/MemoEditor/Editor"), {
     ssr: false,
@@ -19,6 +20,10 @@ export default function MemoEditor({ loadPostHanlder }) {
     const [focused, setFocused] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [tags, setTags] = useState([]);
+    const {
+        nav: [navReload, setNavReload],
+    } = useContext(GlobalContext);
+
     const { classes, theme } = useStyles({
         floating: isEdit || focused,
     });
@@ -29,7 +34,7 @@ export default function MemoEditor({ loadPostHanlder }) {
 
     useEffect(() => {
         selectChangeHandler("");
-    }, []);
+    }, [form.tagIds]);
 
     const selectChangeHandler = (value) => {
         fetch(`http://localhost:8080/api/tag/search?name=${value}`)
@@ -47,7 +52,7 @@ export default function MemoEditor({ loadPostHanlder }) {
             });
     };
 
-    const saveHandler = () => {
+    const savePostHandler = () => {
         fetch("http://localhost:8080/api/post", {
             method: "POST",
             headers: {
@@ -62,6 +67,25 @@ export default function MemoEditor({ loadPostHanlder }) {
             setIsEdit(false);
             loadPostHanlder();
         });
+    };
+
+    const addTagHandler = async (name) => {
+        fetch(`http://localhost:8080/api/tag?name=${name}`, {
+            method: "POST",
+            headers: {
+                accept: "*/*",
+                "content-type": "application/x-www-form-urlencoded",
+            },
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                setForm({
+                    ...form,
+                    tagIds: [...form.tagIds, response.id.toString()],
+                });
+                setNavReload(!navReload);
+                return response;
+            });
     };
 
     return (
@@ -89,18 +113,20 @@ export default function MemoEditor({ loadPostHanlder }) {
                         searchable
                         creatable
                         clearable
-                        getCreateLabel={(query) => `+ Create ${query}`}
+                        getCreateLabel={(query) => `+ 创建 ${query}`}
+                        maxSelectedValues={10}
                         onCreate={(query) => {
-                            const item = { value: query, label: query };
-                            setTags((current) => [...current, item]);
-                            return item;
+                            addTagHandler(query);
                         }}
                         onChange={(value) =>
                             setForm({ ...form, tagIds: value })
                         }
                         onSearchChange={selectChangeHandler}
                     />
-                    <Button className={classes.control} onClick={saveHandler}>
+                    <Button
+                        className={classes.control}
+                        onClick={savePostHandler}
+                    >
                         保存
                     </Button>
                 </>
