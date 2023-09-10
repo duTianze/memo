@@ -15,14 +15,13 @@ import java.util.stream.Stream;
  */
 public record PostCreateCmd(
         String title,
-        String backgroundImage,
+        String image,
         String content,
         List<Long> tagIds
 ) {
 
-
     public Post newPost() {
-        return new Post(this.title, this.backgroundImage, this.content);
+        return new Post(this.title, this.image, this.content);
     }
 
     public List<PostTag> newPostTags(Post post) {

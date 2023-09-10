@@ -16,15 +16,17 @@ const useStyles = createStyles((theme) => {
     return {
         textEdit: {
             width: "100%",
-            border: `1px solid ${theme.colors.gray[3]}`,
+            "box-shadow":
+                "rgba(0, 0, 0, 0.16) 0px 1px 1px, rgb(51, 51, 51) 0px 0px 0px 1px",
         },
     };
 });
 
-function Editor({ content, setContent, backgroundImage, setBackgroundImage }) {
+function Editor({ form, setForm }) {
     const { classes } = useStyles();
     const editorRef = useRef();
     const [minWidth, setMinWidth] = useState(initMinHeight);
+
     const modules = useMemo(
         () => ({
             toolbar: [
@@ -80,7 +82,7 @@ function Editor({ content, setContent, backgroundImage, setBackgroundImage }) {
         } else {
             setMinWidth(initMinHeight);
         }
-    }, [content]);
+    }, [form.content]);
 
     function getImgUrls(delta) {
         return delta.ops
@@ -93,7 +95,7 @@ function Editor({ content, setContent, backgroundImage, setBackgroundImage }) {
             <ReactQuill
                 theme="bubble"
                 style={{ height: px(minWidth), width: "100%" }}
-                value={content}
+                value={form.content}
                 modules={modules}
                 formats={[
                     "header",
@@ -113,11 +115,11 @@ function Editor({ content, setContent, backgroundImage, setBackgroundImage }) {
                 ]}
                 onChange={(content, delta, source, editor) => {
                     const inserted = getImgUrls(delta);
-
-                    if (inserted.length > 0 && backgroundImage == "") {
-                        setBackgroundImage(inserted[0]);
+                    const updatedForm = { ...form, content };
+                    if (inserted.length > 0 && form.image === "") {
+                        updatedForm.image = inserted[0];
                     }
-                    setContent(content);
+                    setForm(updatedForm);
                 }}
                 ref={editorRef}
             />

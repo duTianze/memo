@@ -23,7 +23,7 @@ public class PostDTO {
 
     private String title;
 
-    private String backgroundImage;
+    private String image;
 
     private String content;
 
@@ -32,7 +32,7 @@ public class PostDTO {
     public PostDTO(Post post, TagRepository tagRepository) {
         this.id = post.getId();
         this.title = post.getTitle();
-        this.backgroundImage = post.getBackgroundImage();
+        this.image = post.getImage();
         this.content = post.getContent();
         List<Tag> tags = tagRepository.findByPostId(post.getId());
         this.tagRecords = Stream.ofNullable(tags)

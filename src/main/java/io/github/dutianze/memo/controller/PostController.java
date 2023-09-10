@@ -42,11 +42,11 @@ public class PostController {
     }
 
     @GetMapping(value = "/search")
-    public Page<PostDTO> findPostDTOByTagId(@RequestParam(required = false)
-                                            Long tagId,
-                                            @ParameterObject
-                                            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-                                            Pageable pageable) {
+    public Page<PostDTO> searchPostDTOByTagId(@RequestParam(required = false)
+                                              Long tagId,
+                                              @ParameterObject
+                                              @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                              Pageable pageable) {
         if (Objects.isNull(tagId)) {
             Page<Post> posts = postRepository.findAll(pageable);
             return posts.map(post -> new PostDTO(post, tagRepository));

@@ -24,20 +24,20 @@ public class Post extends AuditModel {
     private String title;
 
     @Column
-    private String backgroundImage;
+    private String image;
 
     @Column
     private String content;
 
-    public Post(String title, String backgroundImage, String content) {
+    public Post(String title, String image, String content) {
         this.title = title;
-        this.backgroundImage = backgroundImage;
+        this.image = image;
         this.content = content;
     }
 
     public Post(PostDTO postDTO) {
         this.title = postDTO.getTitle();
         this.content = postDTO.getContent();
-        this.backgroundImage = postDTO.getBackgroundImage();
+        this.image = postDTO.getImage();
     }
 }

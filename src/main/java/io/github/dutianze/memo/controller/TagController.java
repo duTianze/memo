@@ -3,7 +3,11 @@ package io.github.dutianze.memo.controller;
 import io.github.dutianze.memo.entity.Tag;
 import io.github.dutianze.memo.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +37,16 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> getAllTags(@SortDefault(sort = "createdAt,desc") Sort sort) {
+    public List<Tag> findAll(@SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Sort sort) {
         return tagRepository.findAll(sort);
+    }
+
+    @GetMapping("/search")
+    public Page<Tag> searchTagByName(@RequestParam(required = false, defaultValue = "") String name,
+                                     @ParameterObject
+                                     @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                     Pageable pageable) {
+        name = "%" + name + "%";
+        return tagRepository.findByNameLike(name, pageable);
     }
 }
