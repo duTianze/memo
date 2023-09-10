@@ -1,0 +1,3 @@
+# memo
+
+nextjs + springboot + sqlite
