@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2023/9/5
  */
 @Repository
-public interface TagRepository extends JpaRepository<Tag, Long> {
+public interface TagRepository extends JpaRepository<Tag, String> {
 
     @Query("""
             select tag
@@ -22,7 +22,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
             left join Tag tag on tag.id = postTag.tagId
             where postTag.postId = :postId
             """)
-    List<Tag> findByPostId(Long postId);
+    List<Tag> findByPostId(String postId);
 
 
     Page<Tag> findByNameLike(String name, Pageable pageable);

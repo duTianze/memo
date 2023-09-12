@@ -1,10 +1,19 @@
 package io.github.dutianze.memo.entity;
 
-import jakarta.persistence.*;
+import io.github.dutianze.memo.entity.common.AuditModel;
+import io.github.dutianze.memo.entity.common.TSIDGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.unit.DataSize;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author dutianze
@@ -17,7 +26,8 @@ import org.springframework.util.unit.DataSize;
 public class Image extends AuditModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "TSID")
+    @GenericGenerator(name = "TSID", type = TSIDGenerator.class)
     private String id;
 
     @Column(name = "disk_size_kb")
@@ -32,7 +42,16 @@ public class Image extends AuditModel {
         this.diskSize = dataSize.toKilobytes();
     }
 
-    public String getURL(String domain) {
-        return String.format("%s/api/image/%s", domain, this.id);
+    public static String getURL(String imageId) {
+        return String.format("%s/api/image/%s", "http://localhost:8080", imageId);
+    }
+
+    public static String getId(String imageUrl) {
+        Path path = Paths.get(imageUrl);
+        return path.getFileName().toString();
+    }
+
+    public static void main(String[] args) {
+
     }
 }

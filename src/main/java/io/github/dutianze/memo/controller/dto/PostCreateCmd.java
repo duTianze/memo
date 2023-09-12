@@ -1,8 +1,8 @@
 package io.github.dutianze.memo.controller.dto;
 
+import io.github.dutianze.memo.entity.Image;
 import io.github.dutianze.memo.entity.Post;
 import io.github.dutianze.memo.entity.PostTag;
-import io.github.dutianze.memo.entity.Tag;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,19 +15,19 @@ import java.util.stream.Stream;
  */
 public record PostCreateCmd(
         String title,
-        String image,
+        String backgroundUrl,
         String content,
-        List<Long> tagIds
+        List<String> tagIds
 ) {
 
     public Post newPost() {
-        return new Post(this.title, this.image, this.content);
+        return new Post(this.title, Image.getId(this.backgroundUrl), this.content);
     }
 
     public List<PostTag> newPostTags(Post post) {
         return Stream.ofNullable(this.tagIds)
                      .flatMap(Collection::stream)
-                     .map(tagId -> new PostTag(post, new Tag(tagId)))
+                     .map(tagId -> new PostTag(post.getId(), tagId))
                      .collect(Collectors.toList());
     }
 }

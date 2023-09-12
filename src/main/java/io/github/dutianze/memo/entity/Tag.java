@@ -1,9 +1,15 @@
 package io.github.dutianze.memo.entity;
 
-import jakarta.persistence.*;
+import io.github.dutianze.memo.entity.common.AuditModel;
+import io.github.dutianze.memo.entity.common.TSIDGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author dutianze
@@ -16,15 +22,12 @@ import lombok.NoArgsConstructor;
 public class Tag extends AuditModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "TSID")
+    @GenericGenerator(name = "TSID", type = TSIDGenerator.class)
+    private String id;
 
     @Column
     private String name;
-
-    public Tag(Long id) {
-        this.id = id;
-    }
 
     public static Tag of(String name) {
         Tag tag = new Tag();

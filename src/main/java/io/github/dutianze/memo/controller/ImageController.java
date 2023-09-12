@@ -27,18 +27,16 @@ public class ImageController {
     private final ImageRepository imageRepository;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile image)
+    public ResponseEntity<String> handleFileUpload(@RequestParam("image") MultipartFile file)
             throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        Thumbnails.of(image.getInputStream())
-                  .size(500, 500)
+        Thumbnails.of(file.getInputStream())
+                  .size(800, 800)
                   .outputFormat(MediaType.IMAGE_PNG.getSubtype())
                   .toOutputStream(os);
-        Image noteImage = new Image(os.toByteArray());
-        Image saved = imageRepository.save(noteImage);
-        return ResponseEntity.ok().body(
-                saved.getURL("http://localhost:8080")
-        );
+        Image image = new Image(os.toByteArray());
+        Image saved = imageRepository.save(image);
+        return ResponseEntity.ok().body(Image.getURL(saved.getId()));
     }
 
     @GetMapping(value = "/{id}")

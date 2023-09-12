@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @date 2023/9/6
  */
 @Repository
-public interface PostTagRepository extends JpaRepository<PostTag, Long> {
+public interface PostTagRepository extends JpaRepository<PostTag, String> {
 
 }

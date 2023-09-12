@@ -1,4 +1,4 @@
-package io.github.dutianze.memo.entity;
+package io.github.dutianze.memo.entity.common;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;

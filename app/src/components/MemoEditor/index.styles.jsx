@@ -46,7 +46,7 @@ export default createStyles((theme, { floating }) => ({
             transition: "color 150ms ease",
             color: !floating ? "transparent" : undefined,
         },
-        "box-shadow":
+        boxShadow:
             "rgba(0, 0, 0, 0.16) 0px 1px 1px, rgb(51, 51, 51) 0px 0px 0px 1px",
     },
     control: {

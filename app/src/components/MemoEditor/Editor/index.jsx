@@ -16,7 +16,7 @@ const useStyles = createStyles((theme) => {
     return {
         textEdit: {
             width: "100%",
-            "box-shadow":
+            boxShadow:
                 "rgba(0, 0, 0, 0.16) 0px 1px 1px, rgb(51, 51, 51) 0px 0px 0px 1px",
         },
     };
@@ -117,7 +117,7 @@ function Editor({ form, setForm }) {
                     const inserted = getImgUrls(delta);
                     const updatedForm = { ...form, content };
                     if (inserted.length > 0 && form.image === "") {
-                        updatedForm.image = inserted[0];
+                        updatedForm.backgroundUrl = inserted[0];
                     }
                     setForm(updatedForm);
                 }}

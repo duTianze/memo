@@ -1,10 +1,15 @@
 package io.github.dutianze.memo.entity;
 
-import io.github.dutianze.memo.controller.dto.PostDTO;
-import jakarta.persistence.*;
+import io.github.dutianze.memo.entity.common.AuditModel;
+import io.github.dutianze.memo.entity.common.TSIDGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author dutianze
@@ -17,27 +22,22 @@ import lombok.NoArgsConstructor;
 public class Post extends AuditModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "TSID")
+    @GenericGenerator(name = "TSID", type = TSIDGenerator.class)
+    private String id;
 
     @Column
     private String title;
 
-    @Column
-    private String image;
+    @Column(name = "background_id")
+    private String backgroundId;
 
     @Column
     private String content;
 
-    public Post(String title, String image, String content) {
+    public Post(String title, String backgroundId, String content) {
         this.title = title;
-        this.image = image;
+        this.backgroundId = backgroundId;
         this.content = content;
-    }
-
-    public Post(PostDTO postDTO) {
-        this.title = postDTO.getTitle();
-        this.content = postDTO.getContent();
-        this.image = postDTO.getImage();
     }
 }

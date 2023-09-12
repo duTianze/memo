@@ -42,7 +42,7 @@ public class PostService {
         }
     }
 
-    public Post getPostById(Long noteId) {
+    public Post getPostById(String noteId) {
         return postRepository.findById(noteId)
                              .orElseThrow(() -> new NoteNotFoundException("Post not found ID: " + noteId));
     }
@@ -51,7 +51,7 @@ public class PostService {
         return postRepository.findAll(Sort.by(Direction.DESC, "createTime"));
     }
 
-    public Post updatePost(Long id, Post updateNote) {
+    public Post updatePost(String id, Post updateNote) {
         postRepository.findById(id)
                       .orElseThrow(() -> new NoteNotFoundException("Invalid post ID: " + id));
 
@@ -60,9 +60,9 @@ public class PostService {
         return postRepository.save(updateNote);
     }
 
-    public boolean deletePost(Long noteId) {
-        if (postRepository.existsById(noteId)) {
-            postRepository.deleteById(noteId);
+    public boolean deletePost(String postId) {
+        if (postRepository.existsById(postId)) {
+            postRepository.deleteById(postId);
             return true;
         } else {
             return false;

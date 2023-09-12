@@ -1,9 +1,12 @@
 package io.github.dutianze.memo.entity;
 
+import io.github.dutianze.memo.entity.common.AuditModel;
+import io.github.dutianze.memo.entity.common.TSIDGenerator;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * @author dutianze
@@ -18,25 +21,18 @@ import lombok.NoArgsConstructor;
 public class PostTag extends AuditModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "TSID")
+    @GenericGenerator(name = "TSID", type = TSIDGenerator.class)
+    private String id;
 
-    @Column(name = "post_id", insertable = false, updatable = false)
-    private Long postId;
+    @Column(name = "post_id")
+    private String postId;
 
-    @Column(name = "tag_id", insertable = false, updatable = false)
-    private Long tagId;
+    @Column(name = "tag_id")
+    private String tagId;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
-
-    public PostTag(Post post, Tag tag) {
-        this.post = post;
-        this.tag = tag;
+    public PostTag(String postId, String tagId) {
+        this.postId = postId;
+        this.tagId = tagId;
     }
 }
