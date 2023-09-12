@@ -42,7 +42,9 @@ export default function App(props) {
                 styles={(theme) => ({
                     main: {
                         paddingTop: rem(60),
-                        margin: `${rem(10)} 0`,
+                        paddingRight: 0,
+                        paddingBottom: 0,
+                        height: "calc(100vh - 60rem)",
                         backgroundColor: "white",
                     },
                 })}

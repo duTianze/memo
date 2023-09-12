@@ -5,9 +5,12 @@ export default createStyles((theme) => ({
         height: "100%",
         width: "100%",
     },
+    scrollArea: {
+        paddingRight: "16px",
+    },
     content: {
         padding: 0,
-        width: "100%",
+        width: "calc",
         height: "100%",
         display: "flex",
         flexWrap: "wrap",
