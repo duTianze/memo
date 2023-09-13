@@ -49,7 +49,7 @@ export default function MemoEditor({
             .then((result) => result.json())
             .then((result) => {
                 setTags([...tags, result]);
-                tagIdsHandler.append(result.value);
+                setMemo({ tagIds: [...memo.tagIds, result.value] });
             });
     };
 
