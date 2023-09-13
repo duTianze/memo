@@ -1,6 +1,6 @@
 package io.github.dutianze.memo.repository;
 
-import io.github.dutianze.memo.entity.Post;
+import io.github.dutianze.memo.entity.Memo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Repository;
  * @date 2023/8/11
  */
 @Repository
-public interface PostRepository extends JpaRepository<Post, String> {
+public interface MemoRepository extends JpaRepository<Memo, String> {
 
     @Query("""
-            select distinct post
-            from Post post
-            inner join PostTag postTag on post.id = postTag.postId
-            where postTag.tagId = :tagId
+            select distinct memo
+            from Memo memo
+            inner join MemoTag memoTag on memo.id = memoTag.memoId
+            where memoTag.tagId = :tagId
             """)
-    Slice<Post> findPostIdsByTagId(@Param("tagId") String tagId, Pageable pageable);
+    Slice<Memo> findMemoIdsByTagId(@Param("tagId") String tagId, Pageable pageable);
 }

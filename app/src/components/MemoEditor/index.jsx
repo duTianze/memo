@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { Button, MultiSelect, TextInput, Group } from "@mantine/core";
+import { useListState } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
@@ -8,64 +9,32 @@ const Editor = dynamic(import("@/components/MemoEditor/Editor"), {
     ssr: false,
 });
 
-const formDataInit = {
-    title: "",
-    content: "",
-    image: "",
-    tagIds: [],
-};
-
-export default function MemoEditor({ loadPostHanlder }) {
-    const [form, setForm] = useState(formDataInit);
-    const [focused, setFocused] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
-    const [tags, setTags] = useState([]);
+export default function MemoEditor({
+    memo,
+    setMemo,
+    height,
+    width,
+    edit,
+    saveAfter,
+}) {
     const {
-        nav: [navReload, setNavReload],
+        tags: [tags, setTags],
     } = useContext(GlobalContext);
-
-    const { classes, theme } = useStyles({
-        floating: isEdit || focused,
+    const { classes } = useStyles({
+        floating: edit,
+        width: width,
     });
 
-    useEffect(() => {
-        setIsEdit(form.title.length > 0);
-    }, [form.title]);
-
-    useEffect(() => {
-        selectChangeHandler("");
-    }, [form.tagIds]);
-
-    const selectChangeHandler = (value) => {
-        fetch(`http://localhost:8080/api/tag/search?name=${value}`)
-            .then((response) => response.json())
-            .then((result) => {
-                setTags(
-                    result.content.map((item) => ({
-                        label: item.name,
-                        value: item.id.toString(),
-                    }))
-                );
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    };
-
-    const savePostHandler = () => {
-        fetch("http://localhost:8080/api/post", {
+    const saveMemoHandler = () => {
+        fetch("http://localhost:8080/api/memo", {
             method: "POST",
             headers: {
                 accept: "*/*",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                ...form,
-            }),
+            body: JSON.stringify(memo),
         }).then((response) => {
-            setForm(formDataInit);
-            setIsEdit(false);
-            loadPostHanlder();
+            saveAfter();
         });
     };
 
@@ -77,14 +46,10 @@ export default function MemoEditor({ loadPostHanlder }) {
                 "content-type": "application/x-www-form-urlencoded",
             },
         })
-            .then((response) => response.json())
-            .then((response) => {
-                setForm({
-                    ...form,
-                    tagIds: [...form.tagIds, response.id.toString()],
-                });
-                setNavReload(!navReload);
-                return response;
+            .then((result) => result.json())
+            .then((result) => {
+                setTags([...tags, result]);
+                tagIdsHandler.append(result.value);
             });
     };
 
@@ -94,21 +59,19 @@ export default function MemoEditor({ loadPostHanlder }) {
                 label="添加"
                 required
                 classNames={classes}
-                value={form.title}
+                value={memo.title}
                 onChange={(event) =>
-                    setForm({ ...form, title: event.currentTarget.value })
+                    setMemo({ title: event.currentTarget.value })
                 }
                 mt="md"
                 autoComplete="nope"
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
             />
-            {isEdit ? (
+            {edit ? (
                 <>
-                    <Editor form={form} setForm={setForm} />
+                    <Editor memo={memo} setMemo={setMemo} height={height} />
                     <MultiSelect
                         data={tags}
-                        value={form.tagIds}
+                        value={memo.tagIds}
                         placeholder="选择标签"
                         searchable
                         creatable
@@ -118,14 +81,13 @@ export default function MemoEditor({ loadPostHanlder }) {
                         onCreate={(query) => {
                             addTagHandler(query);
                         }}
-                        onChange={(value) =>
-                            setForm({ ...form, tagIds: value })
-                        }
-                        onSearchChange={selectChangeHandler}
+                        onChange={(value) => {
+                            setMemo({ tagIds: value });
+                        }}
                     />
                     <Button
                         className={classes.control}
-                        onClick={savePostHandler}
+                        onClick={saveMemoHandler}
                     >
                         保存
                     </Button>

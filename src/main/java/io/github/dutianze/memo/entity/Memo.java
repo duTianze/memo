@@ -19,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Post extends AuditModel {
+public class Memo extends AuditModel {
 
     @Id
     @GeneratedValue(generator = "TSID")
@@ -29,15 +29,16 @@ public class Post extends AuditModel {
     @Column
     private String title;
 
-    @Column(name = "background_id")
-    private String backgroundId;
+    @Column(name = "background")
+    private String background;
 
     @Column
     private String content;
 
-    public Post(String title, String backgroundId, String content) {
+    public Memo(String id, String title, String background, String content) {
+        this.id = id;
         this.title = title;
-        this.backgroundId = backgroundId;
+        this.background = background;
         this.content = content;
     }
 }

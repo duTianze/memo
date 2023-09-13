@@ -2,7 +2,7 @@ import { IconEye, IconMessageCircle } from "@tabler/icons-react";
 import { Card, Text, Group, Center } from "@mantine/core";
 import useStyles from "./index.styles";
 
-export default function ImageCard({ image, title }) {
+export default function ImageCard({ background, title, cardClickHanlder }) {
     const { classes, theme } = useStyles();
 
     return (
@@ -14,10 +14,11 @@ export default function ImageCard({ image, title }) {
             component="a"
             // href={link}
             target="_blank"
+            onClick={cardClickHanlder}
         >
             <div
                 className={classes.image}
-                style={{ backgroundImage: `url(${image})` }}
+                style={{ backgroundImage: `url(${background})` }}
             />
             <div className={classes.overlay} />
             <div className={classes.content}>

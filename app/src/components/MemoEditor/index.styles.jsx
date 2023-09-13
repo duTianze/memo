@@ -1,11 +1,11 @@
 import { createStyles, rem } from "@mantine/core";
 
-export default createStyles((theme, { floating }) => ({
+export default createStyles((theme, { floating, width }) => ({
     editor: {
         backgroundColor: theme.white,
         paddingTop: 0,
         paddingBottom: theme.spacing.md,
-        width: floating ? "90%" : "30%",
+        width: floating ? width : "30%",
     },
     content: {
         padding: 0,

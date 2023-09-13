@@ -24,16 +24,16 @@ const useStyles = createStyles((theme) => {
 
 export default function App(props) {
     const { Component, pageProps } = props;
-    const [navReload, setNavReload] = useState(false);
-    const [selectTag, setSelectTag] = useState("");
+    const [tags, setTags] = useState([]);
+    const [tagId, setTagId] = useState("");
     const [opened, setOpened] = useState(true);
     const { classes } = useStyles();
 
     return (
         <GlobalContext.Provider
             value={{
-                nav: [navReload, setNavReload],
-                tag: [selectTag, setSelectTag],
+                tagId: [tagId, setTagId],
+                tags: [tags, setTags],
             }}
         >
             <AppShell

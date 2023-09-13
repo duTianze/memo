@@ -4,6 +4,7 @@ export default createStyles((theme) => ({
     main: {
         height: "100%",
         width: "100%",
+        paddingTop: "8px",
     },
     scrollArea: {
         paddingRight: "16px",

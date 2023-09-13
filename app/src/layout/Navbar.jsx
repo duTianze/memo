@@ -6,10 +6,9 @@ import useStyles from "./Navbar.styles";
 
 export default ({ opened }) => {
     const { classes, cx } = useStyles();
-    const [tags, setTags] = useState([]);
     const {
-        nav: [navReload, setNavReload],
-        tag: [selectTagId, setSelectTagId],
+        tags: [tags, setTags],
+        tagId: [tagId, setTagId],
     } = useContext(GlobalContext);
 
     useEffect(() => {
@@ -22,7 +21,7 @@ export default ({ opened }) => {
             .catch((error) => {
                 console.error("Error:", error);
             });
-    }, [navReload]);
+    }, []);
 
     return opened ? (
         <Navbar
@@ -39,22 +38,19 @@ export default ({ opened }) => {
                     padding: "10px",
                 })}
             >
-                {tags.map((item) => (
+                {tags.map((tag) => (
                     <a
-                        key={item.id}
+                        key={tag.value}
                         className={cx(classes.link, {
-                            [classes.linkActive]: item.id === selectTagId,
+                            [classes.linkActive]: tag.value === tagId,
                         })}
-                        href={item.link}
                         onClick={(event) => {
                             event.preventDefault();
-                            setSelectTagId(
-                                selectTagId === item.id ? "" : item.id
-                            );
+                            setTagId(tagId === tag.value ? "" : tag.value);
                         }}
                     >
                         <IconTags className={classes.linkIcon} stroke={1.5} />
-                        <span>{item.name}</span>
+                        <span>{tag.label}</span>
                     </a>
                 ))}
             </Navbar.Section>

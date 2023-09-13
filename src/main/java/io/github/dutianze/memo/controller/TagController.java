@@ -1,19 +1,20 @@
 package io.github.dutianze.memo.controller;
 
+import io.github.dutianze.memo.controller.dto.TagRecord;
 import io.github.dutianze.memo.entity.Tag;
 import io.github.dutianze.memo.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author dutianze
@@ -27,26 +28,24 @@ public class TagController {
     private final TagRepository tagRepository;
 
     @PostMapping
-    public ResponseEntity<Tag> addTag(@RequestParam String name) {
+    public ResponseEntity<TagRecord> addTag(@RequestParam String name) {
         try {
             Tag addedTag = tagRepository.save(Tag.of(name));
-            return ResponseEntity.status(HttpStatus.CREATED).body(addedTag);
+            TagRecord tagRecord = new TagRecord(addedTag);
+            return ResponseEntity.status(HttpStatus.CREATED).body(tagRecord);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @GetMapping
-    public List<Tag> findAll(@SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Sort sort) {
-        return tagRepository.findAll(sort);
-    }
-
-    @GetMapping("/search")
-    public Page<Tag> searchTagByName(@RequestParam(required = false, defaultValue = "") String name,
-                                     @ParameterObject
-                                     @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-                                     Pageable pageable) {
-        name = "%" + name + "%";
-        return tagRepository.findByNameLike(name, pageable);
+    public List<TagRecord> findAll(@ParameterObject
+                                   @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                   Sort sort) {
+        List<Tag> tags = tagRepository.findAll(sort);
+        return Stream.ofNullable(tags)
+                     .flatMap(Collection::stream)
+                     .map(TagRecord::new)
+                     .collect(Collectors.toList());
     }
 }

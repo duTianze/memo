@@ -9,12 +9,10 @@ window.Quill = Quill;
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/imageResize", ImageResize);
 
-const initMinHeight = 50;
-const initMaxHeight = 500;
-
-const useStyles = createStyles((theme) => {
+const useStyles = createStyles((theme, { height }) => {
     return {
         textEdit: {
+            height: `${height}`,
             width: "100%",
             boxShadow:
                 "rgba(0, 0, 0, 0.16) 0px 1px 1px, rgb(51, 51, 51) 0px 0px 0px 1px",
@@ -22,10 +20,9 @@ const useStyles = createStyles((theme) => {
     };
 });
 
-function Editor({ form, setForm }) {
-    const { classes } = useStyles();
+function Editor({ memo, setMemo, height }) {
+    const { classes } = useStyles({ height });
     const editorRef = useRef();
-    const [minWidth, setMinWidth] = useState(initMinHeight);
 
     const modules = useMemo(
         () => ({
@@ -74,16 +71,6 @@ function Editor({ form, setForm }) {
         []
     );
 
-    useEffect(() => {
-        const quill = editorRef.current.editor;
-        const length = quill.getLength();
-        if (length > 1) {
-            setMinWidth(initMaxHeight);
-        } else {
-            setMinWidth(initMinHeight);
-        }
-    }, [form.content]);
-
     function getImgUrls(delta) {
         return delta.ops
             .filter((i) => i.insert && i.insert.image)
@@ -94,8 +81,8 @@ function Editor({ form, setForm }) {
         <div className={classes.textEdit}>
             <ReactQuill
                 theme="bubble"
-                style={{ height: px(minWidth), width: "100%" }}
-                value={form.content}
+                // style={{ height: `100vh - 60rem`, width: "100%" }}
+                value={memo.content}
                 modules={modules}
                 formats={[
                     "header",
@@ -115,11 +102,11 @@ function Editor({ form, setForm }) {
                 ]}
                 onChange={(content, delta, source, editor) => {
                     const inserted = getImgUrls(delta);
-                    const updatedForm = { ...form, content };
-                    if (inserted.length > 0 && form.image === "") {
-                        updatedForm.backgroundUrl = inserted[0];
+                    const updatedMemo = { content: content };
+                    if (inserted.length > 0 && memo.background === "") {
+                        updatedMemo.background = inserted[0];
                     }
-                    setForm(updatedForm);
+                    setMemo(updatedMemo);
                 }}
                 ref={editorRef}
             />

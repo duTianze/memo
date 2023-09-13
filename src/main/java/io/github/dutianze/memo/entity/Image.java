@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.unit.DataSize;
 
@@ -47,11 +48,10 @@ public class Image extends AuditModel {
     }
 
     public static String getId(String imageUrl) {
+        if (StringUtils.isEmpty(imageUrl)) {
+            return null;
+        }
         Path path = Paths.get(imageUrl);
         return path.getFileName().toString();
-    }
-
-    public static void main(String[] args) {
-
     }
 }

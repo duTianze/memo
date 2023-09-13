@@ -1,8 +1,6 @@
 package io.github.dutianze.memo.repository;
 
 import io.github.dutianze.memo.entity.Tag;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,12 +16,9 @@ public interface TagRepository extends JpaRepository<Tag, String> {
 
     @Query("""
             select tag
-            from PostTag postTag
-            left join Tag tag on tag.id = postTag.tagId
-            where postTag.postId = :postId
+            from MemoTag memoTag
+            left join Tag tag on tag.id = memoTag.tagId
+            where memoTag.memoId = :memoId
             """)
-    List<Tag> findByPostId(String postId);
-
-
-    Page<Tag> findByNameLike(String name, Pageable pageable);
+    List<Tag> findByMemoId(String memoId);
 }

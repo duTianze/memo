@@ -1,7 +1,7 @@
 package io.github.dutianze.memo.controller.dto;
 
 import io.github.dutianze.memo.entity.Image;
-import io.github.dutianze.memo.entity.Post;
+import io.github.dutianze.memo.entity.Memo;
 import io.github.dutianze.memo.entity.Tag;
 import io.github.dutianze.memo.repository.TagRepository;
 import lombok.Data;
@@ -18,27 +18,27 @@ import java.util.stream.Stream;
  */
 @Data
 @NoArgsConstructor
-public class PostDTO {
+public class MemoDTO {
 
     private String id;
 
     private String title;
 
-    private String backgroundUrl;
+    private String background;
 
     private String content;
 
-    private List<TagRecord> tagRecords;
+    private List<String> tagIds;
 
-    public PostDTO(Post post, TagRepository tagRepository) {
-        this.id = post.getId();
-        this.title = post.getTitle();
-        this.backgroundUrl = Image.getURL(post.getBackgroundId());
-        this.content = post.getContent();
-        List<Tag> tags = tagRepository.findByPostId(post.getId());
-        this.tagRecords = Stream.ofNullable(tags)
+    public MemoDTO(Memo memo, TagRepository tagRepository) {
+        this.id = memo.getId();
+        this.title = memo.getTitle();
+        this.background = Image.getURL(memo.getBackground());
+        this.content = memo.getContent();
+        List<Tag> tags = tagRepository.findByMemoId(memo.getId());
+        this.tagIds = Stream.ofNullable(tags)
                                 .flatMap(Collection::stream)
-                                .map(tag -> new TagRecord(tag.getId(), tag.getName()))
+                                .map(Tag::getId)
                                 .collect(Collectors.toList());
     }
 }
