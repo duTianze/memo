@@ -1,7 +1,6 @@
 import { useState } from "react";
 import NextApp from "next/app";
 import Header from "@/layout/Header";
-import Navbar from "@/layout/Navbar";
 import {
     MantineProvider,
     AppShell,
@@ -18,6 +17,7 @@ const useStyles = createStyles((theme) => {
     return {
         main: {
             height: "100%",
+            width: "100%",
         },
     };
 });
@@ -25,42 +25,23 @@ const useStyles = createStyles((theme) => {
 export default function App(props) {
     const { Component, pageProps } = props;
     const [tags, setTags] = useState([]);
-    const [tagId, setTagId] = useState("");
+    const [tagIds, setTagIds] = useState([]);
     const [opened, setOpened] = useState(true);
     const { classes } = useStyles();
 
     return (
         <GlobalContext.Provider
             value={{
-                tagId: [tagId, setTagId],
+                tagId: [tagIds, setTagIds],
                 tags: [tags, setTags],
             }}
         >
-            <AppShell
-                header={<Header opened={opened} setOpened={setOpened} />}
-                navbar={<Navbar opened={opened} />}
-                styles={(theme) => ({
-                    main: {
-                        paddingTop: rem(60),
-                        paddingRight: 0,
-                        paddingBottom: 0,
-                        height: "calc(100vh - 60rem)",
-                        backgroundColor: "white",
-                    },
-                })}
-            >
-                <Head>
-                    <title>Memo</title>
-                </Head>
-                <MantineProvider
-                    theme={{ fontFamily: "Open Sans" }}
-                    withGlobalStyles
-                    withNormalizeCSS
-                >
-                    <Component className={classes.main} {...pageProps} />
-                    <Notifications />
-                </MantineProvider>
-            </AppShell>
+            <Head>
+                <title>Memo</title>
+            </Head>
+            <Header opened={opened} setOpened={setOpened} />
+            <Component className={classes.main} {...pageProps} />
+            <Notifications />
         </GlobalContext.Provider>
     );
 }

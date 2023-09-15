@@ -4,6 +4,7 @@ import io.github.dutianze.memo.controller.dto.TagRecord;
 import io.github.dutianze.memo.entity.Tag;
 import io.github.dutianze.memo.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
@@ -39,10 +40,18 @@ public class TagController {
     }
 
     @GetMapping
-    public List<TagRecord> findAll(@ParameterObject
+    public List<TagRecord> findAll(@RequestParam(required = false)
+                                   List<String> tagIds,
+                                   @ParameterObject
                                    @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                    Sort sort) {
-        List<Tag> tags = tagRepository.findAll(sort);
+        List<Tag> tags;
+        if (CollectionUtils.isEmpty(tagIds)) {
+            tags = tagRepository.findAll(sort);
+        } else {
+            tags = tagRepository.findByTagIds(tagIds, tagIds.size(), sort);
+        }
+
         return Stream.ofNullable(tags)
                      .flatMap(Collection::stream)
                      .map(TagRecord::new)

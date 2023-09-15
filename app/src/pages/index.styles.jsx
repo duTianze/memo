@@ -2,16 +2,32 @@ import { createStyles, rem } from "@mantine/core";
 
 export default createStyles((theme) => ({
     main: {
-        height: "100%",
-        width: "100%",
-        paddingTop: "8px",
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        justifyContent: "flex-start",
+        alignItems: "stretch",
+        top: "50px",
+        height: "calc(100vh - 50px)",
     },
-    scrollArea: {
-        paddingRight: "16px",
+    tagNav: {
+        flexGrow: 0,
+        flexShrink: 1,
+        flexBasis: "260px",
     },
     content: {
+        flexGrow: 1,
+        flexShrink: 3,
+        flexBasis: "auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+    },
+    scrollArea: {
+        overflowY: "auto",
+        height: "auto",
         padding: 0,
-        width: "calc",
+        width: "100%",
         height: "100%",
         display: "flex",
         flexWrap: "wrap",
@@ -19,9 +35,5 @@ export default createStyles((theme) => ({
         justifyContent: "start",
         alignItems: "stretch",
         alignContent: "start",
-    },
-    contentGrid: {
-        width: "100%",
-        height: "100%",
     },
 }));

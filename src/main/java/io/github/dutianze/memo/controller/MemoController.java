@@ -1,14 +1,14 @@
 package io.github.dutianze.memo.controller;
 
-import io.github.dutianze.memo.controller.dto.MemoSaveCmd;
 import io.github.dutianze.memo.controller.dto.MemoDTO;
+import io.github.dutianze.memo.controller.dto.MemoSaveCmd;
 import io.github.dutianze.memo.entity.Memo;
 import io.github.dutianze.memo.repository.MemoRepository;
 import io.github.dutianze.memo.repository.TagRepository;
 import io.github.dutianze.memo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -17,6 +17,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author dutianze
@@ -45,16 +47,17 @@ public class MemoController {
 
     @GetMapping(value = "/search")
     public Slice<MemoDTO> searchMemoDTOByTagId(@RequestParam(required = false)
-                                               String tagId,
+                                               List<String> tagIds,
                                                @ParameterObject
-                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 11)
                                                Pageable pageable) {
-        if (StringUtils.isEmpty(tagId)) {
-            Slice<Memo> memos = memoRepository.findAll(pageable);
-            return memos.map(memo -> new MemoDTO(memo, tagRepository));
+        Slice<Memo> memos;
+        if (CollectionUtils.isEmpty(tagIds)) {
+            memos = memoRepository.findAll(pageable);
+        } else {
+            memos = memoRepository.findMemoIdsByTagId(tagIds, tagIds.size(), pageable);
         }
 
-        Slice<Memo> memos = memoRepository.findMemoIdsByTagId(tagId, pageable);
         return memos.map(memo -> new MemoDTO(memo, tagRepository));
     }
 

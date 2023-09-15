@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author dutianze
  * @date 2023/8/11
@@ -16,10 +18,15 @@ import org.springframework.stereotype.Repository;
 public interface MemoRepository extends JpaRepository<Memo, String> {
 
     @Query("""
-            select distinct memo
+            select memo
             from Memo memo
-            inner join MemoTag memoTag on memo.id = memoTag.memoId
-            where memoTag.tagId = :tagId
+            where memo.id in (
+                select memoTag.memoId
+                from MemoTag memoTag
+                where memoTag.tagId in :tagIds
+                group by memoTag.memoId
+                having count(1) = :size
+            )
             """)
-    Slice<Memo> findMemoIdsByTagId(@Param("tagId") String tagId, Pageable pageable);
+    Slice<Memo> findMemoIdsByTagId(@Param("tagIds") List<String> tagIds, @Param("size")int size, Pageable pageable);
 }

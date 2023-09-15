@@ -37,8 +37,8 @@ public class MemoDTO {
         this.content = memo.getContent();
         List<Tag> tags = tagRepository.findByMemoId(memo.getId());
         this.tagIds = Stream.ofNullable(tags)
-                                .flatMap(Collection::stream)
-                                .map(Tag::getId)
-                                .collect(Collectors.toList());
+                            .flatMap(Collection::stream)
+                            .map(Tag::getId)
+                            .collect(Collectors.toList());
     }
 }

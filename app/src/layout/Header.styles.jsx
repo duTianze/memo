@@ -10,7 +10,7 @@ export default createStyles((theme) => {
             left: 0,
             right: 0,
             padding: theme.spacing.xs,
-            height: rem(60),
+            height: "50px",
             zIndex: 10,
             borderBottom: `1px solid ${theme.colors.gray[2]}`,
             backdropFilter: "blur(2px)",

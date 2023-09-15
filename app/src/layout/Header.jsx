@@ -2,7 +2,6 @@ import {
     Header,
     Autocomplete,
     Group,
-    Burger,
     Container,
     useMantineTheme,
 } from "@mantine/core";
@@ -14,16 +13,9 @@ export default ({ opened, setOpened }) => {
     const theme = useMantineTheme();
 
     return (
-        <Header mb={120} className={classes.main}>
+        <Header className={classes.main}>
             <Container className={classes.header} fluid>
                 <Group>
-                    <Burger
-                        className={classes.burger}
-                        onClick={() => setOpened((o) => !o)}
-                        size="sm"
-                        color={theme.colors.gray[6]}
-                        mr="xl"
-                    />
                     <IconBallpen size={28} />
                 </Group>
 

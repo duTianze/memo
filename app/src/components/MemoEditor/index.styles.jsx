@@ -3,7 +3,7 @@ import { createStyles, rem } from "@mantine/core";
 export default createStyles((theme, { floating, width }) => ({
     editor: {
         backgroundColor: theme.white,
-        paddingTop: 0,
+        paddingTop: "8px",
         paddingBottom: theme.spacing.md,
         width: floating ? width : "30%",
     },

@@ -81,7 +81,6 @@ function Editor({ memo, setMemo, height }) {
         <div className={classes.textEdit}>
             <ReactQuill
                 theme="bubble"
-                // style={{ height: `100vh - 60rem`, width: "100%" }}
                 value={memo.content}
                 modules={modules}
                 formats={[

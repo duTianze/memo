@@ -1,3 +1,15 @@
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue";
+    position: relative;
+}
+
+html,
+body {
+    margin: 0;
+}
+
 .ql-tooltip {
     left: 0 !important;
 }

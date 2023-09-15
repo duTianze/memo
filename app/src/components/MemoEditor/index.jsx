@@ -54,7 +54,7 @@ export default function MemoEditor({
     };
 
     return (
-        <Group className={classes.editor} position="right">
+        <div className={classes.editor}>
             <TextInput
                 label="添加"
                 required
@@ -76,6 +76,13 @@ export default function MemoEditor({
                         searchable
                         creatable
                         clearable
+                        dropdownPosition="top"
+                        transitionProps={{
+                            duration: 150,
+                            transition: "pop-top-left",
+                            timingFunction: "ease",
+                        }}
+                        radius="xl"
                         getCreateLabel={(query) => `+ 创建 ${query}`}
                         maxSelectedValues={10}
                         onCreate={(query) => {
@@ -93,6 +100,6 @@ export default function MemoEditor({
                     </Button>
                 </>
             ) : undefined}
-        </Group>
+        </div>
     );
 }
