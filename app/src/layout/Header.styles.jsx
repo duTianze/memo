@@ -9,7 +9,6 @@ export default createStyles((theme) => {
             top: 0,
             left: 0,
             right: 0,
-            padding: theme.spacing.xs,
             height: "50px",
             zIndex: 10,
             borderBottom: `1px solid ${theme.colors.gray[2]}`,

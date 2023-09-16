@@ -3,16 +3,17 @@ import { Chip } from "@mantine/core";
 import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
 
-export default function TagNav({}) {
+export default function Tag({}) {
     const { classes } = useStyles();
     const {
         tags: [tags, setTags],
         tagId: [tagIds, setTagIds],
+        channelId,
     } = useContext(GlobalContext);
 
     useEffect(() => {
         setTags([]);
-        fetch(`http://localhost:8080/api/tag?tagIds=${tagIds}`)
+        fetch(`http://localhost:8080/api/${channelId}/tag?tagIds=${tagIds}`)
             .then((response) => response.json())
             .then((result) => {
                 setTags(result);

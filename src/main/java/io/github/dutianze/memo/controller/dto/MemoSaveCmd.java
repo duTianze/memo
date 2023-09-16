@@ -20,16 +20,21 @@ public record MemoSaveCmd(
         String background,
         String content,
         List<String> tagIds
+
 ) {
 
-    public Memo newMemo() {
-        return new Memo(this.id, this.title, Image.getId(this.background), this.content);
+    public Memo newMemo(String channelId) {
+        return new Memo(channelId,
+                        this.id,
+                        this.title,
+                        Image.getId(this.background),
+                        this.content);
     }
 
     public Set<MemoTag> newMemoTags(Memo memo) {
         return Stream.ofNullable(this.tagIds)
                      .flatMap(Collection::stream)
-                     .map(tagId -> new MemoTag(memo.getId(), tagId))
+                     .map(tagId -> new MemoTag(memo.getChannelId(), memo.getId(), tagId))
                      .collect(Collectors.toSet());
     }
 }

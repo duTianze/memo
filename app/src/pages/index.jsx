@@ -6,7 +6,7 @@ import MemoEditor from "@/components/MemoEditor";
 import MemoModal from "@/components/MemoModal";
 import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
-import TagNav from "@/components/TagNav";
+import Tag from "@/components/Tag";
 
 const memoInit = {
     title: "",
@@ -22,6 +22,7 @@ export default function HomePage() {
     const { classes } = useStyles();
     const {
         tagId: [tagIds, setTagIds],
+        channelId,
     } = useContext(GlobalContext);
     const [opened, { open, close }] = useDisclosure(false);
     const [createMemo, setCreateMemo] = useSetState(memoInit);
@@ -41,7 +42,7 @@ export default function HomePage() {
 
     const loadMemoHanlder = (append, page) => {
         fetch(
-            `http://localhost:8080/api/memo/search?tagIds=${tagIds}&page=${page}`
+            `http://localhost:8080/api/${channelId}/memo/search?tagIds=${tagIds}&page=${page}`
         )
             .then((response) => response.json())
             .then((result) => {
@@ -71,7 +72,7 @@ export default function HomePage() {
     };
 
     const cardClickHanlder = (memoId) => {
-        fetch(`http://localhost:8080/api/memo/${memoId}`)
+        fetch(`http://localhost:8080/api/${channelId}/memo/${memoId}`)
             .then((response) => response.json())
             .then((result) => {
                 setMemo(result);
@@ -85,7 +86,7 @@ export default function HomePage() {
     return (
         <div className={classes.main}>
             <div className={classes.tagNav}>
-                <TagNav />
+                <Tag />
             </div>
             <div className={classes.content}>
                 <MemoEditor

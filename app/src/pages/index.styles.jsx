@@ -9,6 +9,9 @@ export default createStyles((theme) => ({
         alignItems: "stretch",
         top: "50px",
         height: "calc(100vh - 50px)",
+        [theme.fn.smallerThan("sm")]: {
+            flexDirection: "column",
+        },
     },
     tagNav: {
         flexGrow: 0,
@@ -21,7 +24,8 @@ export default createStyles((theme) => ({
         flexBasis: "auto",
         display: "flex",
         flexDirection: "column",
-        alignItems: "stretch",
+        alignItems: "center",
+        margin: "8px",
     },
     scrollArea: {
         overflowY: "auto",

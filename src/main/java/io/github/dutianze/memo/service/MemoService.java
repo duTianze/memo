@@ -34,9 +34,9 @@ public class MemoService {
     private final MemoTagRepository memoTagRepository;
     private final TagRepository tagRepository;
 
-    public MemoDTO saveMemo(MemoSaveCmd memoSaveCmd) {
+    public MemoDTO saveMemo(String channelId, MemoSaveCmd memoSaveCmd) {
         try {
-            Memo memo = memoRepository.save(memoSaveCmd.newMemo());
+            Memo memo = memoRepository.save(memoSaveCmd.newMemo(channelId));
             Set<MemoTag> preMemoTags = memoTagRepository.findByMemoId(memo.getId());
             Set<MemoTag> currMemoTags = memoSaveCmd.newMemoTags(memo);
             List<MemoTag> addMemoTags = Stream.ofNullable(currMemoTags)

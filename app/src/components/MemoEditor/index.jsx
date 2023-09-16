@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { Button, MultiSelect, TextInput, Group } from "@mantine/core";
-import { useListState } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
@@ -19,6 +18,7 @@ export default function MemoEditor({
 }) {
     const {
         tags: [tags, setTags],
+        channelId,
     } = useContext(GlobalContext);
     const { classes } = useStyles({
         floating: edit,
@@ -26,7 +26,7 @@ export default function MemoEditor({
     });
 
     const saveMemoHandler = () => {
-        fetch("http://localhost:8080/api/memo", {
+        fetch(`http://localhost:8080/api/${channelId}/memo`, {
             method: "POST",
             headers: {
                 accept: "*/*",
@@ -39,7 +39,7 @@ export default function MemoEditor({
     };
 
     const addTagHandler = async (name) => {
-        fetch(`http://localhost:8080/api/tag?name=${name}`, {
+        fetch(`http://localhost:8080/api/${channelId}/tag?name=${name}`, {
             method: "POST",
             headers: {
                 accept: "*/*",

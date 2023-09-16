@@ -2,10 +2,7 @@ package io.github.dutianze.memo.entity;
 
 import io.github.dutianze.memo.entity.common.AuditModel;
 import io.github.dutianze.memo.entity.common.TSIDGenerator;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,6 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Data
 @Entity
+@Table(indexes = {@Index(name = "memo_channel_id_idx", columnList = "channel_id")})
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Memo extends AuditModel {
@@ -25,6 +23,9 @@ public class Memo extends AuditModel {
     @GeneratedValue(generator = "TSID")
     @GenericGenerator(name = "TSID", type = TSIDGenerator.class)
     private String id;
+
+    @Column(name = "channel_id")
+    private String channelId;
 
     @Column
     private String title;
@@ -35,7 +36,8 @@ public class Memo extends AuditModel {
     @Column
     private String content;
 
-    public Memo(String id, String title, String background, String content) {
+    public Memo(String channelId, String id, String title, String background, String content) {
+        this.channelId = channelId;
         this.id = id;
         this.title = title;
         this.background = background;

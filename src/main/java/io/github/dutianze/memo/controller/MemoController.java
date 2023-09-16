@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/memo")
+@RequestMapping("/api/{channelId}/memo")
 @RequiredArgsConstructor
 public class MemoController {
 
@@ -35,9 +35,11 @@ public class MemoController {
     private final TagRepository tagRepository;
 
     @PostMapping
-    public ResponseEntity<MemoDTO> saveMemo(@RequestBody MemoSaveCmd memoSaceCmd) {
+    public ResponseEntity<MemoDTO> saveMemo(@PathVariable
+                                            String channelId,
+                                            @RequestBody MemoSaveCmd memoSaveCmd) {
         try {
-            MemoDTO memoDTO = memoService.saveMemo(memoSaceCmd);
+            MemoDTO memoDTO = memoService.saveMemo(channelId, memoSaveCmd);
             return ResponseEntity.status(HttpStatus.CREATED).body(memoDTO);
         } catch (Exception e) {
             log.error("addMemo error ", e);
@@ -46,29 +48,31 @@ public class MemoController {
     }
 
     @GetMapping(value = "/search")
-    public Slice<MemoDTO> searchMemoDTOByTagId(@RequestParam(required = false)
+    public Slice<MemoDTO> searchMemoDTOByTagId(@PathVariable
+                                               String channelId,
+                                               @RequestParam(required = false)
                                                List<String> tagIds,
                                                @ParameterObject
                                                @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 11)
                                                Pageable pageable) {
         Slice<Memo> memos;
         if (CollectionUtils.isEmpty(tagIds)) {
-            memos = memoRepository.findAll(pageable);
+            memos = memoRepository.findAllByChannelId(channelId, pageable);
         } else {
-            memos = memoRepository.findMemoIdsByTagId(tagIds, tagIds.size(), pageable);
+            memos = memoRepository.findMemoIdsByTagId(channelId, tagIds, tagIds.size(), pageable);
         }
 
         return memos.map(memo -> new MemoDTO(memo, tagRepository));
     }
 
     @GetMapping("/{id}")
-    public MemoDTO getUser(@PathVariable String id) {
+    public MemoDTO findMemo(@PathVariable String id) {
         Memo memo = memoService.getMemoById(id);
         return new MemoDTO(memo, tagRepository);
     }
 
     @PutMapping("/{id}")
-    public Memo updateUser(@PathVariable String id, @RequestBody Memo user) {
+    public Memo updateMemo(@PathVariable String id, @RequestBody Memo user) {
         return memoService.updateMemo(id, user);
     }
 

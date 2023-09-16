@@ -22,16 +22,18 @@ import java.util.stream.Stream;
  * @date 2023/9/5
  */
 @RestController
-@RequestMapping("/api/tag")
+@RequestMapping("/api/{channelId}/tag")
 @RequiredArgsConstructor
 public class TagController {
 
     private final TagRepository tagRepository;
 
     @PostMapping
-    public ResponseEntity<TagRecord> addTag(@RequestParam String name) {
+    public ResponseEntity<TagRecord> addTag(@PathVariable
+                                            String channelId,
+                                            @RequestParam String name) {
         try {
-            Tag addedTag = tagRepository.save(Tag.of(name));
+            Tag addedTag = tagRepository.save(Tag.of(channelId, name));
             TagRecord tagRecord = new TagRecord(addedTag);
             return ResponseEntity.status(HttpStatus.CREATED).body(tagRecord);
         } catch (Exception e) {
@@ -40,16 +42,18 @@ public class TagController {
     }
 
     @GetMapping
-    public List<TagRecord> findAll(@RequestParam(required = false)
+    public List<TagRecord> findAll(@PathVariable
+                                   String channelId,
+                                   @RequestParam(required = false)
                                    List<String> tagIds,
                                    @ParameterObject
                                    @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                    Sort sort) {
         List<Tag> tags;
         if (CollectionUtils.isEmpty(tagIds)) {
-            tags = tagRepository.findAll(sort);
+            tags = tagRepository.findAllByChannelId(channelId, sort);
         } else {
-            tags = tagRepository.findByTagIds(tagIds, tagIds.size(), sort);
+            tags = tagRepository.findByTagIds(channelId, tagIds, tagIds.size(), sort);
         }
 
         return Stream.ofNullable(tags)

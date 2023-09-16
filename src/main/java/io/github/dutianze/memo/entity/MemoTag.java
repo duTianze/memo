@@ -16,7 +16,8 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(indexes = {@Index(name = "memo_id_idx", columnList = "memo_id"),
-                  @Index(name = "tag_id_idx", columnList = "tag_id")})
+                  @Index(name = "tag_id_idx", columnList = "tag_id"),
+                  @Index(name = "memo_tag_channel_id_idx", columnList = "channel_id")})
 @NoArgsConstructor
 public class MemoTag extends AuditModel {
 
@@ -25,13 +26,17 @@ public class MemoTag extends AuditModel {
     @GenericGenerator(name = "TSID", type = TSIDGenerator.class)
     private String id;
 
+    @Column(name = "channel_id")
+    private String channelId;
+
     @Column(name = "memo_id")
     private String memoId;
 
     @Column(name = "tag_id")
     private String tagId;
 
-    public MemoTag(String memoId, String tagId) {
+    public MemoTag(String channelId, String memoId, String tagId) {
+        this.channelId = channelId;
         this.memoId = memoId;
         this.tagId = tagId;
     }

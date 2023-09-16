@@ -1,17 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NextApp from "next/app";
 import Header from "@/layout/Header";
-import {
-    MantineProvider,
-    AppShell,
-    createStyles,
-    rem,
-    Global,
-} from "@mantine/core";
+import { createStyles } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import Head from "next/head";
 import "./globals.css";
 import GlobalContext from "./global-context";
+import Channel from "@/components/Channel";
 
 const useStyles = createStyles((theme) => {
     return {
@@ -26,7 +21,8 @@ export default function App(props) {
     const { Component, pageProps } = props;
     const [tags, setTags] = useState([]);
     const [tagIds, setTagIds] = useState([]);
-    const [opened, setOpened] = useState(true);
+    const [channelId, setChannelId] = useState("1");
+    const [channelOpened, setChannelOpened] = useState(true);
     const { classes } = useStyles();
 
     return (
@@ -34,12 +30,20 @@ export default function App(props) {
             value={{
                 tagId: [tagIds, setTagIds],
                 tags: [tags, setTags],
+                channelId,
             }}
         >
             <Head>
                 <title>Memo</title>
+                <link rel="icon" href="/static/favicon.ico" />
             </Head>
-            <Header opened={opened} setOpened={setOpened} />
+            <Header setChannelOpened={setChannelOpened} />
+            <Channel
+                channelId={channelId}
+                setChannelId={setChannelId}
+                channelOpened={channelOpened}
+                setChannelOpened={setChannelOpened}
+            />
             <Component className={classes.main} {...pageProps} />
             <Notifications />
         </GlobalContext.Provider>

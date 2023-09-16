@@ -3,6 +3,7 @@ package io.github.dutianze.memo.repository;
 import io.github.dutianze.memo.entity.Tag;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,9 @@ import java.util.List;
  */
 @Repository
 public interface TagRepository extends JpaRepository<Tag, String> {
+
+
+    List<Tag> findAllByChannelId(String channelId, Sort sort);
 
     @Query("""
             select tag
@@ -34,11 +38,21 @@ public interface TagRepository extends JpaRepository<Tag, String> {
                 where memoTag.memoId in (
                     select memoTag.memoId
                     from MemoTag memoTag
-                    where memoTag.tagId in :tagIds
+                    where memoTag.tagId in :tagIds and memoTag.channelId = :channelId
                     group by memoTag.memoId
                     having count(1) = :size
                 )
             )
             """)
-    List<Tag> findByTagIds(@Param("tagIds") List<String> tagIds, @Param("size") int size, Sort sort);
+    List<Tag> findByTagIds(@Param("channelId") String channelId,
+                           @Param("tagIds") List<String> tagIds,
+                           @Param("size") int size, Sort sort);
+
+    @Modifying
+    @Query("""
+            update Tag tag
+            set tag.channelId = :currentChannelId
+            where tag.channelId = :preChannelId
+            """)
+    void updateChannel(String preChannelId, String currentChannelId);
 }
