@@ -9,6 +9,10 @@ html,
 body {
     margin: 0;
 }
+.ql-editor {
+    /* overflow-y: scroll; */
+    min-height: 300px;
+}
 
 .ql-tooltip {
     left: 0 !important;
