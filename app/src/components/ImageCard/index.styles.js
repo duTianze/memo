@@ -6,6 +6,7 @@ export default createStyles((theme) => ({
         margin: "4px",
         position: "relative",
         height: px(300),
+        minWidth: px(400),
         maxWidth: px(500),
         backgroundColor: theme.colors.gray[0],
         [`&:hover .${getStylesRef("image")}`]: {

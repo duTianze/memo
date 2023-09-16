@@ -18,8 +18,6 @@ export default ({ setChannelOpened }) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [memo, setMemo] = useSetState({});
     const {
-        tagId: [tagIds, setTagIds],
-        channel: [channelId, setChannelId],
         reload: [reload, setReload],
     } = useContext(GlobalContext);
 
@@ -60,7 +58,7 @@ export default ({ setChannelOpened }) => {
                 memo={memo}
                 setMemo={setMemo}
                 saveAfter={() => {
-                    loadMemoHanlder(false, 0);
+                    setReload(!reload);
                 }}
             />
         </Header>
