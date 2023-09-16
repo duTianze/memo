@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import { Group, ScrollArea, Box } from "@mantine/core";
+import { Box } from "@mantine/core";
 import { useListState, useDisclosure, useSetState } from "@mantine/hooks";
 import ImageCard from "@/components/ImageCard";
 import MemoEditor from "@/components/MemoEditor";
@@ -22,12 +22,13 @@ export default function HomePage() {
     const { classes } = useStyles();
     const {
         tagId: [tagIds, setTagIds],
-        channelId,
+        channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
     const [opened, { open, close }] = useDisclosure(false);
     const [createMemo, setCreateMemo] = useSetState(memoInit);
     const [memo, setMemo] = useSetState(memoInit);
     const [edit, setEdit] = useState(false);
+    const [channelOpened, setChannelOpened] = useState(false);
 
     useEffect(() => {
         steLast(false);

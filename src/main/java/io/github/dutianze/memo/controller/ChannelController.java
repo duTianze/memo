@@ -35,7 +35,7 @@ public class ChannelController {
                                  @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                  Sort sort) {
         List<Channel> channels = channelRepository.findAll(sort);
-        channels.add(new Channel("", "空频道"));
+        channels.add(new Channel("empty", "空频道"));
         return channels;
     }
 
@@ -60,9 +60,9 @@ public class ChannelController {
 
         if (channelRepository.existsById(id)) {
             channelRepository.deleteById(id);
-            memoRepository.updateChannel(id, "");
-            memoTagRepository.updateChannel(id, "");
-            tagRepository.updateChannel(id, "");
+            memoRepository.updateChannel(id, "empty");
+            memoTagRepository.updateChannel(id, "empty");
+            tagRepository.updateChannel(id, "empty");
             return true;
         }
         return false;

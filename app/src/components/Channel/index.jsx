@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
     Drawer,
     Group,
@@ -18,17 +18,17 @@ import {
     IconTrash,
     IconBookmarkEdit,
 } from "@tabler/icons-react";
+import GlobalContext from "@/pages/global-context";
 
-export default function Channel({
-    channelId,
-    setChannelId,
-    channelOpened,
-    setChannelOpened,
-}) {
+export default function Channel({}) {
     const { classes, theme, cx } = useStyles();
     const [channels, setChannels] = useState([]);
     const [dialogOpened, setDialogOpened] = useState(false);
     const [newName, setNewName] = useState("");
+    const {
+        channel: [channelId, setChannelId],
+        channelOpen: [channelOpened, setChannelOpened],
+    } = useContext(GlobalContext);
 
     useEffect(() => {
         loadChannels();
@@ -91,6 +91,7 @@ export default function Channel({
             size={160}
             className={classes.main}
         >
+            <Drawer.Overlay />
             <Drawer.Content className={classes.content}>
                 <Drawer.Header className={classes.header}>
                     <Group>

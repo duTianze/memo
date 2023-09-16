@@ -21,8 +21,8 @@ export default function App(props) {
     const { Component, pageProps } = props;
     const [tags, setTags] = useState([]);
     const [tagIds, setTagIds] = useState([]);
-    const [channelId, setChannelId] = useState("1");
-    const [channelOpened, setChannelOpened] = useState(true);
+    const [channelId, setChannelId] = useState("empty");
+    const [channelOpened, setChannelOpened] = useState(false);
     const { classes } = useStyles();
 
     return (
@@ -30,7 +30,8 @@ export default function App(props) {
             value={{
                 tagId: [tagIds, setTagIds],
                 tags: [tags, setTags],
-                channelId,
+                channel: [channelId, setChannelId],
+                channelOpen: [channelOpened, setChannelOpened],
             }}
         >
             <Head>
@@ -38,12 +39,7 @@ export default function App(props) {
                 <link rel="icon" href="/static/favicon.ico" />
             </Head>
             <Header setChannelOpened={setChannelOpened} />
-            <Channel
-                channelId={channelId}
-                setChannelId={setChannelId}
-                channelOpened={channelOpened}
-                setChannelOpened={setChannelOpened}
-            />
+            <Channel />
             <Component className={classes.main} {...pageProps} />
             <Notifications />
         </GlobalContext.Provider>
