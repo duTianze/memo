@@ -18,7 +18,7 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
                 <MemoEditor
                     memo={memo}
                     setMemo={setMemo}
-                    height={"calc(100vh * 2 / 3)"}
+                    height={"100%"}
                     width={"100%"}
                     edit={true}
                     saveAfter={() => {

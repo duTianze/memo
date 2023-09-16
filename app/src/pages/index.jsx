@@ -93,7 +93,7 @@ export default function HomePage() {
                 <MemoEditor
                     memo={createMemo}
                     setMemo={setCreateMemo}
-                    height={"calc(100vh * 2 / 3)"}
+                    height={"100%"}
                     width={"90%"}
                     edit={edit}
                     saveAfter={() => {

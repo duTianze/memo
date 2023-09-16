@@ -18,7 +18,7 @@ export default function MemoEditor({
 }) {
     const {
         tags: [tags, setTags],
-        channelId,
+        channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
     const { classes } = useStyles({
         floating: edit,
