@@ -35,7 +35,7 @@ export default function HomePage() {
         setPage(0);
         memosHandler.setState([]);
         loadMemoHanlder(false, 0);
-    }, [tagIds]);
+    }, [channelId, tagIds]);
 
     useEffect(() => {
         setEdit(createMemo.title.length > 0);

@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { useRouter, useParams } from "next/router";
 import {
     Drawer,
     Group,
@@ -21,6 +22,7 @@ import {
 import GlobalContext from "@/pages/global-context";
 
 export default function Channel({}) {
+    const router = useRouter();
     const { classes, theme, cx } = useStyles();
     const [channels, setChannels] = useState([]);
     const [dialogOpened, setDialogOpened] = useState(false);
@@ -32,7 +34,11 @@ export default function Channel({}) {
 
     useEffect(() => {
         loadChannels();
-    }, []);
+        const hash = window.location.hash.split("#")[1];
+        if (hash) {
+            setChannelId(window.location.hash.split("#")[1]);
+        }
+    }, [useParams]);
 
     const loadChannels = () => {
         fetch(`http://localhost:8080/api/channel`)
@@ -144,16 +150,17 @@ export default function Channel({}) {
                     <Divider my="sm" />
                     {channels.map((channel) => (
                         <a
+                            key={channel.id}
                             className={cx(classes.link, {
                                 [classes.linkActive]: channel.id === channelId,
                             })}
                             onClick={(event) => {
                                 event.preventDefault();
                                 setChannelId(channel.id);
+                                router.push(`/#${channel.id}`);
                             }}
                         >
                             <Menu
-                                key={channel.id}
                                 position="bottom"
                                 transitionProps={{
                                     transition: "scale-y",
@@ -166,7 +173,9 @@ export default function Channel({}) {
                                         stroke={1.5}
                                     />
                                 </Menu.Target>
-                                <Menu.Dropdown>
+                                <Menu.Dropdown
+                                    disabled={channel.id === channelId}
+                                >
                                     <Menu.Item
                                         icon={<IconBookmarkEdit size={14} />}
                                         onClick={() => setDialogOpened(true)}
@@ -183,7 +192,6 @@ export default function Channel({}) {
                                     </Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
-
                             <span>{channel.name}</span>
                         </a>
                     ))}
