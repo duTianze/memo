@@ -20,7 +20,6 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
                     setMemo={setMemo}
                     height={"100%"}
                     width={"100%"}
-                    edit={true}
                     saveAfter={() => {
                         saveAfter();
                         close();

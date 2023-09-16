@@ -21,6 +21,7 @@ export default function App(props) {
     const { Component, pageProps } = props;
     const [tags, setTags] = useState([]);
     const [tagIds, setTagIds] = useState([]);
+    const [reload, setReload] = useState(false);
     const [channelId, setChannelId] = useState("empty");
     const [channelOpened, setChannelOpened] = useState(false);
     const { classes } = useStyles();
@@ -32,6 +33,7 @@ export default function App(props) {
                 tags: [tags, setTags],
                 channel: [channelId, setChannelId],
                 channelOpen: [channelOpened, setChannelOpened],
+                reload: [reload, setReload],
             }}
         >
             <Head>

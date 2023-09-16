@@ -1,9 +1,32 @@
+import { useContext } from "react";
+import { useDisclosure, useSetState } from "@mantine/hooks";
 import { Header, Autocomplete, Group, Container, Burger } from "@mantine/core";
 import { IconSearch, IconBallpen } from "@tabler/icons-react";
+import MemoModal from "@/components/MemoModal";
 import useStyles from "./Header.styles";
+import GlobalContext from "@/pages/global-context";
+
+const memoInit = {
+    title: "",
+    content: "",
+    background: "",
+    tagIds: [],
+};
 
 export default ({ setChannelOpened }) => {
     const { classes, theme } = useStyles();
+    const [opened, { open, close }] = useDisclosure(false);
+    const [memo, setMemo] = useSetState({});
+    const {
+        tagId: [tagIds, setTagIds],
+        channel: [channelId, setChannelId],
+        reload: [reload, setReload],
+    } = useContext(GlobalContext);
+
+    const createMemoHandler = () => {
+        setMemo(memoInit);
+        open();
+    };
 
     return (
         <Header className={classes.main}>
@@ -16,7 +39,11 @@ export default ({ setChannelOpened }) => {
                         color={theme.colors.gray[6]}
                         mr="xl"
                     />
-                    <IconBallpen size={28} />
+                    <IconBallpen
+                        className={classes.icon}
+                        size={28}
+                        onClick={createMemoHandler}
+                    />
                 </Group>
 
                 <Group>
@@ -27,6 +54,15 @@ export default ({ setChannelOpened }) => {
                     />
                 </Group>
             </Container>
+            <MemoModal
+                opened={opened}
+                close={close}
+                memo={memo}
+                setMemo={setMemo}
+                saveAfter={() => {
+                    loadMemoHanlder(false, 0);
+                }}
+            />
         </Header>
     );
 };

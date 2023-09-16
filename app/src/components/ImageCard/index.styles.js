@@ -52,7 +52,6 @@ export default createStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        zIndex: 1,
     },
 
     title: {

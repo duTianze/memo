@@ -51,5 +51,8 @@ export default createStyles((theme) => {
                 backgroundColor: "#e6e6e6",
             },
         },
+        icon: {
+            cursor: "pointer",
+        },
     };
 });

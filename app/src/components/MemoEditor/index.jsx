@@ -13,7 +13,6 @@ export default function MemoEditor({
     setMemo,
     height,
     width,
-    edit,
     saveAfter,
 }) {
     const {
@@ -21,7 +20,7 @@ export default function MemoEditor({
         channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
     const { classes } = useStyles({
-        floating: edit,
+        floating: true,
         width: width,
     });
 
@@ -66,40 +65,33 @@ export default function MemoEditor({
                 mt="md"
                 autoComplete="nope"
             />
-            {edit ? (
-                <>
-                    <Editor memo={memo} setMemo={setMemo} height={height} />
-                    <MultiSelect
-                        data={tags}
-                        value={memo.tagIds}
-                        placeholder="选择标签"
-                        searchable
-                        creatable
-                        clearable
-                        dropdownPosition="top"
-                        transitionProps={{
-                            duration: 150,
-                            transition: "pop-top-left",
-                            timingFunction: "ease",
-                        }}
-                        radius="xl"
-                        getCreateLabel={(query) => `+ 创建 ${query}`}
-                        maxSelectedValues={10}
-                        onCreate={(query) => {
-                            addTagHandler(query);
-                        }}
-                        onChange={(value) => {
-                            setMemo({ tagIds: value });
-                        }}
-                    />
-                    <Button
-                        className={classes.control}
-                        onClick={saveMemoHandler}
-                    >
-                        保存
-                    </Button>
-                </>
-            ) : undefined}
+            <Editor memo={memo} setMemo={setMemo} height={height} />
+            <MultiSelect
+                data={tags}
+                value={memo.tagIds}
+                placeholder="选择标签"
+                searchable
+                creatable
+                clearable
+                dropdownPosition="top"
+                transitionProps={{
+                    duration: 150,
+                    transition: "pop-top-left",
+                    timingFunction: "ease",
+                }}
+                radius="xl"
+                getCreateLabel={(query) => `+ 创建 ${query}`}
+                maxSelectedValues={10}
+                onCreate={(query) => {
+                    addTagHandler(query);
+                }}
+                onChange={(value) => {
+                    setMemo({ tagIds: value });
+                }}
+            />
+            <Button className={classes.control} onClick={saveMemoHandler}>
+                保存
+            </Button>
         </div>
     );
 }

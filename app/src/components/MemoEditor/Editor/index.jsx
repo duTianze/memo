@@ -3,8 +3,7 @@ import { px, createStyles } from "@mantine/core";
 import ImageResize from "quill-image-resize-module-react";
 import ImageUploader from "quill-image-uploader";
 import ReactQuill, { Quill } from "react-quill";
-import "react-quill/dist/quill.bubble.css";
-
+import "react-quill/dist/quill.snow.css";
 window.Quill = Quill;
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/imageResize", ImageResize);
@@ -16,6 +15,8 @@ const useStyles = createStyles((theme, { height }) => {
             width: "100%",
             boxShadow:
                 "rgba(0, 0, 0, 0.16) 0px 1px 1px, rgb(51, 51, 51) 0px 0px 0px 1px",
+            margin: "16px 0",
+            minHeight: "500px",
         },
     };
 });
@@ -80,7 +81,7 @@ function Editor({ memo, setMemo, height }) {
     return (
         <div className={classes.textEdit}>
             <ReactQuill
-                theme="bubble"
+                theme="snow"
                 value={memo.content}
                 modules={modules}
                 formats={[

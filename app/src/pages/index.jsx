@@ -2,7 +2,6 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { Box } from "@mantine/core";
 import { useListState, useDisclosure, useSetState } from "@mantine/hooks";
 import ImageCard from "@/components/ImageCard";
-import MemoEditor from "@/components/MemoEditor";
 import MemoModal from "@/components/MemoModal";
 import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
@@ -23,23 +22,17 @@ export default function HomePage() {
     const {
         tagId: [tagIds, setTagIds],
         channel: [channelId, setChannelId],
+        reload: [reload, setReload],
     } = useContext(GlobalContext);
     const [opened, { open, close }] = useDisclosure(false);
-    const [createMemo, setCreateMemo] = useSetState(memoInit);
     const [memo, setMemo] = useSetState(memoInit);
-    const [edit, setEdit] = useState(false);
-    const [channelOpened, setChannelOpened] = useState(false);
 
     useEffect(() => {
         steLast(false);
         setPage(0);
         memosHandler.setState([]);
         loadMemoHanlder(false, 0);
-    }, [channelId, tagIds]);
-
-    useEffect(() => {
-        setEdit(createMemo.title.length > 0);
-    }, [createMemo.title]);
+    }, [reload, channelId, tagIds]);
 
     const loadMemoHanlder = (append, page) => {
         fetch(
@@ -90,17 +83,6 @@ export default function HomePage() {
                 <Tag />
             </div>
             <div className={classes.content}>
-                <MemoEditor
-                    memo={createMemo}
-                    setMemo={setCreateMemo}
-                    height={"100%"}
-                    width={"90%"}
-                    edit={edit}
-                    saveAfter={() => {
-                        loadMemoHanlder(false, 0);
-                        setCreateMemo(memoInit);
-                    }}
-                />
                 <Box className={classes.scrollArea} onScroll={handleScroll}>
                     {memos.map((memo) => (
                         <ImageCard
