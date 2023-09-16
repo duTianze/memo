@@ -8,7 +8,7 @@ export default function Tag({}) {
     const {
         tags: [tags, setTags],
         tagId: [tagIds, setTagIds],
-        channelId,
+        channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ export default function Tag({}) {
             .catch((error) => {
                 console.error("Error:", error);
             });
-    }, [tagIds]);
+    }, [channelId, tagIds]);
 
     return (
         <Chip.Group
