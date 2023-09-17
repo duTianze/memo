@@ -32,7 +32,8 @@ export default function HomePage() {
     const [opened, { open, close }] = useDisclosure(false);
     const [memo, setMemo] = useSetState(memoInit);
     const [memoGroup, setMemoGroup] = useState([]);
-    const [column, setColumn] = useState(4);
+    const [column, setColumn] = useState(5);
+
     const resizeHandler = () => {
         if (window.innerWidth <= 576) {
             setColumn(1);
@@ -47,7 +48,6 @@ export default function HomePage() {
         }
     };
     useWindowEvent("resize", resizeHandler);
-
     useEffect(() => {
         resizeHandler();
     }, []);
@@ -97,7 +97,7 @@ export default function HomePage() {
             return;
         }
         if (
-            event.currentTarget.scrollTop + event.currentTarget.clientHeight ==
+            event.currentTarget.scrollTop + event.currentTarget.clientHeight >=
             event.currentTarget.scrollHeight
         ) {
             loadMemoHanlder(true, page + 1);
@@ -122,8 +122,8 @@ export default function HomePage() {
                 <Tag />
             </div>
             <Box className={classes.scrollArea} onScroll={handleScroll}>
-                {memoGroup.map((group) => (
-                    <div className={classes.memoGroup}>
+                {memoGroup.map((group, index) => (
+                    <div key={index} className={classes.memoGroup}>
                         {group.map((memo) => (
                             <ImageCard
                                 key={memo.id}
