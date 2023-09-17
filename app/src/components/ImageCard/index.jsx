@@ -1,62 +1,55 @@
-import { IconEye, IconMessageCircle } from "@tabler/icons-react";
-import { Card, Text, Group, Center } from "@mantine/core";
+import { IconStar } from "@tabler/icons-react";
+import { Card, Text, Group, Box, Image } from "@mantine/core";
+import { Carousel } from "@mantine/carousel";
 import useStyles from "./index.styles";
 
-export default function ImageCard({ background, title, cardClickHanlder }) {
-    const { classes, theme } = useStyles();
+export default function ImageCard({
+    background,
+    title,
+    content,
+    cardClickHanlder,
+}) {
+    const { classes } = useStyles();
 
     return (
         <Card
-            p="lg"
-            shadow="lg"
             className={classes.card}
+            withBorder
+            padding="sm"
             radius="md"
-            component="a"
-            // href={link}
-            target="_blank"
-            onClick={cardClickHanlder}
+            shadow="lg"
         >
-            <div
-                className={classes.image}
-                style={{ backgroundImage: `url(${background})` }}
-            />
-            <div className={classes.overlay} />
-            <div className={classes.content}>
-                <div>
-                    <Text size="sm" className={classes.title} weight={500}>
+            <Card.Section>
+                <Carousel
+                    withIndicators
+                    loop
+                    classNames={{
+                        root: classes.carousel,
+                        controls: classes.carouselControls,
+                        indicator: classes.carouselIndicator,
+                    }}
+                >
+                    <Carousel.Slide>
+                        <Image src={background} />
+                    </Carousel.Slide>
+                </Carousel>
+            </Card.Section>
+
+            <Box onClick={cardClickHanlder}>
+                <Group position="apart" mt="lg">
+                    <Text weight={500} fz="sm">
                         {title}
                     </Text>
 
-                    <Group position="apart" spacing="xs">
-                        <Text size="xs" className={classes.author}>
-                            author
+                    <Group spacing={5}>
+                        <IconStar size="1rem" />
+                        <Text fz="xs" fw={500}>
+                            4.78
                         </Text>
-
-                        <Group spacing="lg">
-                            <Center>
-                                <IconEye
-                                    size="1rem"
-                                    stroke={1.5}
-                                    color={theme.colors.dark[2]}
-                                />
-                                <Text size="xs" className={classes.bodyText}>
-                                    views
-                                </Text>
-                            </Center>
-                            <Center>
-                                <IconMessageCircle
-                                    size="1rem"
-                                    stroke={1.5}
-                                    color={theme.colors.dark[2]}
-                                />
-                                <Text size="xs" className={classes.bodyText}>
-                                    comments
-                                </Text>
-                            </Center>
-                        </Group>
                     </Group>
-                </div>
-            </div>
+                </Group>
+                <Text fz="sm" c="dimmed" mt="sm"></Text>
+            </Box>
         </Card>
     );
 }
