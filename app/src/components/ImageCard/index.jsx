@@ -30,7 +30,7 @@ export default function ImageCard({
                     }}
                 >
                     <Carousel.Slide>
-                        <Image src={background} />
+                        <Image src={background} onClick={cardClickHanlder} />
                     </Carousel.Slide>
                 </Carousel>
             </Card.Section>
