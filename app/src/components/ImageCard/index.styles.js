@@ -5,9 +5,9 @@ export default createStyles((theme) => ({
         flex: "1 0 auto",
         margin: "4px",
         position: "relative",
-        height: px(200),
+        minHeight: px(200),
         minWidth: px(300),
-        maxWidth: px(500),
+        maxWidth: px(350),
         backgroundColor: theme.colors.gray[0],
         [`&:hover .${getStylesRef("image")}`]: {
             transform: "scale(1.03)",

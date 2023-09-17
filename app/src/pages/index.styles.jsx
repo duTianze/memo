@@ -28,7 +28,8 @@ export default createStyles((theme) => ({
         margin: "8px",
     },
     scrollArea: {
-        overflowY: "auto",
+        overflowY: "scroll",
+        overflowX: "hidden",
         height: "auto",
         padding: 0,
         width: "100%",
@@ -39,5 +40,11 @@ export default createStyles((theme) => ({
         justifyContent: "start",
         alignItems: "stretch",
         alignContent: "start",
+        "::-webkit-scrollbar": { WebkitAppearance: "none", width: "10px" },
+        "::-webkit-scrollbar-thumb": {
+            borderRadius: "5px",
+            backgroundColor: "rgba(0,0,0,.5)",
+            WebkitBoxShadow: "0 0 1px rgba(255,255,255,.5)",
+        },
     },
 }));
