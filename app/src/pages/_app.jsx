@@ -20,6 +20,7 @@ const useStyles = createStyles((theme) => {
 export default function App(props) {
     const { Component, pageProps } = props;
     const [tags, setTags] = useState([]);
+    const [filterTags, setFilterTags] = useState([]);
     const [tagIds, setTagIds] = useState([]);
     const [reload, setReload] = useState(false);
     const [channelId, setChannelId] = useState("empty");
@@ -31,6 +32,7 @@ export default function App(props) {
             value={{
                 tagId: [tagIds, setTagIds],
                 tags: [tags, setTags],
+                filterTags: [filterTags, setFilterTags],
                 channel: [channelId, setChannelId],
                 channelOpen: [channelOpened, setChannelOpened],
                 reload: [reload, setReload],

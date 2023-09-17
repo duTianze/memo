@@ -7,13 +7,21 @@ export default function Tag({}) {
     const { classes } = useStyles();
     const {
         tags: [tags, setTags],
+        filterTags: [filterTags, setFilterTags],
         tagId: [tagIds, setTagIds],
         channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
 
     useEffect(() => {
-        setTags([]);
         fetch(`http://localhost:8080/api/${channelId}/tag?tagIds=${tagIds}`)
+            .then((response) => response.json())
+            .then((result) => {
+                setFilterTags(result);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        fetch(`http://localhost:8080/api/${channelId}/tag`)
             .then((response) => response.json())
             .then((result) => {
                 setTags(result);
@@ -31,7 +39,7 @@ export default function Tag({}) {
             onChange={setTagIds}
         >
             <div className={classes.content}>
-                {tags.map((tag) => (
+                {filterTags.map((tag) => (
                     <Chip
                         className={classes.chip}
                         key={tag.value}

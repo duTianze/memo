@@ -21,3 +21,15 @@ body {
 .ql-tooltip {
     left: 0 !important;
 }
+
+.ql-toolbar {
+    position: sticky;
+    background-color: white;
+    top: 0;
+    z-index: 20;
+    border: none !important;
+}
+
+.ql-container.ql-snow {
+    border: none !important;
+}

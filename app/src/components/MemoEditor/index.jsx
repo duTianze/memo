@@ -1,5 +1,12 @@
 import { useContext } from "react";
-import { Button, MultiSelect, TextInput, Group } from "@mantine/core";
+import {
+    Button,
+    MultiSelect,
+    TextInput,
+    Box,
+    Space,
+    Group,
+} from "@mantine/core";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
@@ -17,10 +24,10 @@ export default function MemoEditor({
 }) {
     const {
         tags: [tags, setTags],
+        filterTags: [filterTags, setFilterTags],
         channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
     const { classes } = useStyles({
-        floating: true,
         width: width,
     });
 
@@ -48,14 +55,20 @@ export default function MemoEditor({
             .then((result) => result.json())
             .then((result) => {
                 setTags([...tags, result]);
+                setFilterTags([...filterTags, result]);
                 setMemo({ tagIds: [...memo.tagIds, result.value] });
             });
     };
 
     return (
-        <div className={classes.editor}>
+        <Box className={classes.editor}>
+            <Group position="right">
+                <Button className={classes.control} onClick={saveMemoHandler}>
+                    保存
+                </Button>
+            </Group>
+
             <TextInput
-                label="添加"
                 required
                 classNames={classes}
                 value={memo.title}
@@ -65,7 +78,8 @@ export default function MemoEditor({
                 mt="md"
                 autoComplete="nope"
             />
-            <Editor memo={memo} setMemo={setMemo} height={height} />
+            <Space h="md" />
+
             <MultiSelect
                 data={tags}
                 value={memo.tagIds}
@@ -73,7 +87,7 @@ export default function MemoEditor({
                 searchable
                 creatable
                 clearable
-                dropdownPosition="top"
+                dropdownPosition="bottom"
                 transitionProps={{
                     duration: 150,
                     transition: "pop-top-left",
@@ -89,9 +103,8 @@ export default function MemoEditor({
                     setMemo({ tagIds: value });
                 }}
             />
-            <Button className={classes.control} onClick={saveMemoHandler}>
-                保存
-            </Button>
-        </div>
+
+            <Editor memo={memo} setMemo={setMemo} height={height} />
+        </Box>
     );
 }

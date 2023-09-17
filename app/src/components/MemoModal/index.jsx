@@ -1,9 +1,9 @@
-import { Modal } from "@mantine/core";
+import { Modal, ScrollArea } from "@mantine/core";
 import useStyles from "./index.styles";
 import MemoEditor from "@/components/MemoEditor";
 
 export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
-    const { classes } = useStyles();
+    const { classes, theme } = useStyles();
 
     return (
         <Modal
@@ -11,21 +11,21 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
             size="90%"
             opened={opened}
             onClose={close}
-            title="查看"
             centered
+            withCloseButton={false}
+            radius="lg"
+            scrollAreaComponent={ScrollArea.Autosize}
         >
-            {opened ? (
-                <MemoEditor
-                    memo={memo}
-                    setMemo={setMemo}
-                    height={"100%"}
-                    width={"100%"}
-                    saveAfter={() => {
-                        saveAfter();
-                        close();
-                    }}
-                />
-            ) : undefined}
+            <MemoEditor
+                memo={memo}
+                setMemo={setMemo}
+                height={"100%"}
+                width={"100%"}
+                saveAfter={() => {
+                    saveAfter();
+                    close();
+                }}
+            />
         </Modal>
     );
 }
