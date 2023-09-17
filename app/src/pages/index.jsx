@@ -33,7 +33,7 @@ export default function HomePage() {
     const [memo, setMemo] = useSetState(memoInit);
     const [memoGroup, setMemoGroup] = useState([]);
     const [column, setColumn] = useState(4);
-    useWindowEvent("resize", () => {
+    const resizeHandler = () => {
         if (window.innerWidth <= 576) {
             setColumn(1);
         } else if (window.innerWidth <= 768) {
@@ -45,7 +45,12 @@ export default function HomePage() {
         } else {
             setColumn(5);
         }
-    });
+    };
+    useWindowEvent("resize", resizeHandler);
+
+    useEffect(() => {
+        resizeHandler();
+    }, []);
 
     useEffect(() => {
         steLast(false);
