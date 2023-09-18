@@ -65,9 +65,9 @@ public class ChannelController {
 
         if (channelRepository.existsById(id)) {
             channelRepository.deleteById(id);
-            memoRepository.updateChannel(id, "empty");
-            memoTagRepository.updateChannel(id, "empty");
-            tagRepository.updateChannel(id, "empty");
+            memoRepository.updateChannel(id, TRASH.getId());
+            memoTagRepository.updateChannel(id, TRASH.getId());
+            tagRepository.updateChannel(id, TRASH.getId());
             return true;
         }
         return false;

@@ -23,7 +23,7 @@ export default function App(props) {
     const [filterTags, setFilterTags] = useState([]);
     const [tagIds, setTagIds] = useState([]);
     const [reload, setReload] = useState(false);
-    const [channelId, setChannelId] = useState("empty");
+    const [channelId, setChannelId] = useState("trash");
     const [channelOpened, setChannelOpened] = useState(false);
     const { classes } = useStyles();
 
