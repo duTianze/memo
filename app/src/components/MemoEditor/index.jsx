@@ -33,7 +33,7 @@ export default function MemoEditor({
     });
 
     const addTagHandler = async (name) => {
-        fetch(`http://localhost:8080/api/${channelId}/tag?name=${name}`, {
+        fetch(`http://localhost:12190/api/${channelId}/tag?name=${name}`, {
             method: "POST",
             headers: {
                 accept: "*/*",

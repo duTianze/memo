@@ -19,13 +19,12 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
     }, [memo.title, memo.background, memo.content, memo.rate, memo.tagIds]);
 
     const saveMemoHandler = () => {
-        console.log("@@@", changCount);
         if (changCount < 2 || memo.isDelete) {
             setChangCount(0);
             close();
             return;
         }
-        fetch(`http://localhost:8080/api/${channelId}/memo`, {
+        fetch(`http://localhost:12190/api/${channelId}/memo`, {
             method: "POST",
             headers: {
                 accept: "*/*",
@@ -43,7 +42,7 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
         if (memo.id == undefined) {
             return;
         }
-        fetch(`http://localhost:8080/api/${channelId}/memo/${memo.id}`, {
+        fetch(`http://localhost:12190/api/${channelId}/memo/${memo.id}`, {
             method: "DELETE",
             headers: {
                 accept: "*/*",

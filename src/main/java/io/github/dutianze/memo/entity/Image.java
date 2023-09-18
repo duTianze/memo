@@ -44,7 +44,7 @@ public class Image extends AuditModel {
     }
 
     public static String getURL(String imageId) {
-        return String.format("%s/api/image/%s", "http://localhost:8080", imageId);
+        return String.format("%s/api/image/%s", "http://localhost:12190", imageId);
     }
 
     public static String getId(String imageUrl) {

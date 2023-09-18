@@ -68,7 +68,7 @@ export default function HomePage() {
     const loadMemoHanlder = (append, page) => {
         steLast(true);
         fetch(
-            `http://localhost:8080/api/${channelId}/memo/search?tagIds=${tagIds}&page=${page}`
+            `http://localhost:12190/api/${channelId}/memo/search?tagIds=${tagIds}&page=${page}`
         )
             .then((response) => response.json())
             .then((result) => {
@@ -100,7 +100,7 @@ export default function HomePage() {
     };
 
     const cardClickHanlder = (memoId) => {
-        fetch(`http://localhost:8080/api/${channelId}/memo/${memoId}`)
+        fetch(`http://localhost:12190/api/${channelId}/memo/${memoId}`)
             .then((response) => response.json())
             .then((result) => {
                 setMemo(result);

@@ -51,7 +51,7 @@ function Editor({ memo, setMemo, height }) {
                         const formData = new FormData();
                         formData.append("image", file);
 
-                        fetch("http://localhost:8080/api/image/upload", {
+                        fetch("http://localhost:12190/api/image/upload", {
                             method: "POST",
                             body: formData,
                         })

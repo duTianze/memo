@@ -42,7 +42,7 @@ export default function Channel({}) {
     }, [useParams]);
 
     const loadChannels = () => {
-        fetch(`http://localhost:8080/api/channel`)
+        fetch(`http://localhost:12190/api/channel`)
             .then((response) => response.json())
             .then((result) => {
                 setChannels(result);
@@ -53,7 +53,7 @@ export default function Channel({}) {
     };
 
     const addChannel = () => {
-        fetch("http://localhost:8080/api/channel?name=未命名", {
+        fetch("http://localhost:12190/api/channel?name=未命名", {
             method: "POST",
             headers: {
                 accept: "*/*",
@@ -65,7 +65,7 @@ export default function Channel({}) {
     };
 
     const deleteChannel = () => {
-        fetch(`http://localhost:8080/api/channel/${channelId}`, {
+        fetch(`http://localhost:12190/api/channel/${channelId}`, {
             method: "DELETE",
             headers: {
                 accept: "*/*",
@@ -77,7 +77,7 @@ export default function Channel({}) {
 
     const renameChannel = () => {
         fetch(
-            `http://localhost:8080/api/channel/${channelId}?name=${newName}`,
+            `http://localhost:12190/api/channel/${channelId}?name=${newName}`,
             {
                 method: "PUT",
                 headers: {
