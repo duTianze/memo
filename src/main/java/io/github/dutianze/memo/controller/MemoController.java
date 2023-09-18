@@ -58,7 +58,7 @@ public class MemoController {
                                                @RequestParam(required = false)
                                                List<String> tagIds,
                                                @ParameterObject
-                                               @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC, size = 20)
+                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20)
                                                Pageable pageable) {
         Slice<Memo> memos;
         if (CollectionUtils.isEmpty(tagIds)) {
