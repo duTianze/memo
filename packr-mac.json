@@ -10,5 +10,5 @@
     "Xmx100m"
   ],
   "minimizejre": "hard",
-  "output": "memo"
+  "output": "memo-mac"
 }
