@@ -4,7 +4,7 @@ import { Header, Autocomplete, Group, Container, Burger } from "@mantine/core";
 import { IconSearch, IconBallpen } from "@tabler/icons-react";
 import MemoModal from "@/components/MemoModal";
 import useStyles from "./Header.styles";
-import GlobalContext from "@/pages/global-context";
+import GlobalContext from "@/components/GlobalContext";
 
 const memoInit = {
     title: "",

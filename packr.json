@@ -1,0 +1,14 @@
+{
+  "platform": "mac",
+  "jdk": "/Users/dutianze/Downloads/OpenJDK17U-jre_x64_mac_hotspot_17.0.8.1_1.tar.gz",
+  "executable": "memo",
+  "classpath": [
+    "/Users/dutianze/project/memo/target/memo-0.0.1-SNAPSHOT.jar"
+  ],
+  "mainclass": "org.springframework.boot.loader.JarLauncher",
+  "vmargs": [
+    "Xmx100m"
+  ],
+  "minimizejre": "hard",
+  "output": "memo"
+}

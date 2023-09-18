@@ -34,3 +34,5 @@ build/
 
 /db/*
 .DS_Store
+
+memo.db

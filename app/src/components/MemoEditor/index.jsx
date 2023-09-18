@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
-import GlobalContext from "@/pages/global-context";
+import GlobalContext from "@/components/GlobalContext";
 
 const Editor = dynamic(import("@/components/MemoEditor/Editor"), {
     ssr: false,

@@ -5,7 +5,7 @@ import { createStyles } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import Head from "next/head";
 import "./globals.css";
-import GlobalContext from "./global-context";
+import GlobalContext from "../components/GlobalContext";
 import Channel from "@/components/Channel";
 
 const useStyles = createStyles((theme) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Chip } from "@mantine/core";
 import useStyles from "./index.styles";
-import GlobalContext from "@/pages/global-context";
+import GlobalContext from "@/components/GlobalContext";
 
 export default function Tag({}) {
     const { classes } = useStyles();

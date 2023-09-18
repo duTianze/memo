@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { Modal, ScrollArea } from "@mantine/core";
 import useStyles from "./index.styles";
 import MemoEditor from "@/components/MemoEditor";
-import GlobalContext from "@/pages/global-context";
+import GlobalContext from "@/components/GlobalContext";
 
 export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
     const { classes, theme } = useStyles();

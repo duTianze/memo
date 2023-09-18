@@ -8,8 +8,8 @@ import {
 } from "@mantine/hooks";
 import ImageCard from "@/components/ImageCard";
 import MemoModal from "@/components/MemoModal";
-import useStyles from "./index.styles";
-import GlobalContext from "@/pages/global-context";
+import useStyles from "../components/index.styles";
+import GlobalContext from "@/components/GlobalContext";
 import Tag from "@/components/Tag";
 
 export default function HomePage() {

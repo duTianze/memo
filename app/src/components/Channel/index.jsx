@@ -19,7 +19,7 @@ import {
     IconTrash,
     IconBookmarkEdit,
 } from "@tabler/icons-react";
-import GlobalContext from "@/pages/global-context";
+import GlobalContext from "@/components/GlobalContext";
 
 export default function Channel({}) {
     const router = useRouter();
