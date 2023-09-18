@@ -24,4 +24,6 @@ public interface MemoTagRepository extends JpaRepository<MemoTag, String> {
             where memoTag.channelId = :preChannelId
             """)
     void updateChannel(String preChannelId, String currentChannelId);
+
+    void deleteByMemoId(String memoId);
 }

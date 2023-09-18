@@ -15,11 +15,15 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import static io.github.dutianze.memo.controller.ChannelController.TRASH;
 
 /**
  * @author dutianze
@@ -37,6 +41,7 @@ public class MemoService {
     public MemoDTO saveMemo(String channelId, MemoSaveCmd memoSaveCmd) {
         try {
             Memo memo = memoRepository.save(memoSaveCmd.newMemo(channelId));
+            // memo tag
             Set<MemoTag> preMemoTags = memoTagRepository.findByMemoId(memo.getId());
             Set<MemoTag> currMemoTags = memoSaveCmd.newMemoTags(memo);
             List<MemoTag> addMemoTags = Stream.ofNullable(currMemoTags)
@@ -77,12 +82,20 @@ public class MemoService {
         return memoRepository.save(memo);
     }
 
-    public boolean deleteMemo(String memoId) {
-        if (memoRepository.existsById(memoId)) {
-            memoRepository.deleteById(memoId);
+    @Transactional
+    public boolean deleteMemo(String channelId, String memoId) {
+        Optional<Memo> memoOptional = memoRepository.findById(memoId);
+        if (memoOptional.isPresent()) {
+            if (TRASH.getId().equals(channelId)) {
+                memoRepository.deleteById(memoId);
+            } else {
+                Memo memo = memoOptional.get();
+                memo.setChannelId(TRASH.getId());
+                memoRepository.save(memo);
+            }
+            memoTagRepository.deleteByMemoId(memoId);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }

@@ -28,6 +28,7 @@ export default function Channel({}) {
     const [dialogOpened, setDialogOpened] = useState(false);
     const [newName, setNewName] = useState("");
     const {
+        tagId: [tagIds, setTagIds],
         channel: [channelId, setChannelId],
         channelOpen: [channelOpened, setChannelOpened],
     } = useContext(GlobalContext);
@@ -157,6 +158,7 @@ export default function Channel({}) {
                             onClick={(event) => {
                                 event.preventDefault();
                                 setChannelId(channel.id);
+                                setTagIds([]);
                                 router.push(`/#${channel.id}`);
                             }}
                         >

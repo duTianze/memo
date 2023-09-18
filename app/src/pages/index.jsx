@@ -12,13 +12,6 @@ import useStyles from "./index.styles";
 import GlobalContext from "@/pages/global-context";
 import Tag from "@/components/Tag";
 
-const memoInit = {
-    title: "",
-    content: "",
-    background: "",
-    tagIds: [],
-};
-
 export default function HomePage() {
     const [memos, memosHandler] = useListState([]);
     const [page, setPage] = useState(0);
@@ -30,7 +23,7 @@ export default function HomePage() {
         reload: [reload, setReload],
     } = useContext(GlobalContext);
     const [opened, { open, close }] = useDisclosure(false);
-    const [memo, setMemo] = useSetState(memoInit);
+    const [memo, setMemo] = useSetState({});
     const [memoGroup, setMemoGroup] = useState([]);
     const [column, setColumn] = useState(5);
 
@@ -53,7 +46,6 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        steLast(false);
         setPage(0);
         memosHandler.setState([]);
         loadMemoHanlder(false, 0);
@@ -74,6 +66,7 @@ export default function HomePage() {
     }, [column, memos]);
 
     const loadMemoHanlder = (append, page) => {
+        steLast(true);
         fetch(
             `http://localhost:8080/api/${channelId}/memo/search?tagIds=${tagIds}&page=${page}`
         )
@@ -93,13 +86,15 @@ export default function HomePage() {
     };
 
     const handleScroll = (event) => {
-        if (last) {
-            return;
-        }
         if (
-            event.currentTarget.scrollTop + event.currentTarget.clientHeight >=
+            event.currentTarget.scrollTop +
+                event.currentTarget.clientHeight +
+                5 >=
             event.currentTarget.scrollHeight
         ) {
+            if (last) {
+                return;
+            }
             loadMemoHanlder(true, page + 1);
         }
     };
@@ -127,9 +122,7 @@ export default function HomePage() {
                         {group.map((memo) => (
                             <ImageCard
                                 key={memo.id}
-                                background={memo.background}
-                                title={memo.title}
-                                content={memo.content}
+                                memo={memo}
                                 cardClickHanlder={() =>
                                     cardClickHanlder(memo.id)
                                 }

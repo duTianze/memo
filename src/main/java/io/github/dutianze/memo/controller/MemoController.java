@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static io.github.dutianze.memo.controller.ChannelController.TRASH;
+
 /**
  * @author dutianze
  * @date 2023/8/11
@@ -39,6 +41,9 @@ public class MemoController {
                                             String channelId,
                                             @RequestBody MemoSaveCmd memoSaveCmd) {
         try {
+            if (TRASH.getId().equals(channelId)) {
+                return null;
+            }
             MemoDTO memoDTO = memoService.saveMemo(channelId, memoSaveCmd);
             return ResponseEntity.status(HttpStatus.CREATED).body(memoDTO);
         } catch (Exception e) {
@@ -53,7 +58,7 @@ public class MemoController {
                                                @RequestParam(required = false)
                                                List<String> tagIds,
                                                @ParameterObject
-                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 20)
+                                               @PageableDefault(sort = "updatedAt", direction = Sort.Direction.DESC, size = 20)
                                                Pageable pageable) {
         Slice<Memo> memos;
         if (CollectionUtils.isEmpty(tagIds)) {
@@ -62,23 +67,20 @@ public class MemoController {
             memos = memoRepository.findMemoIdsByTagId(channelId, tagIds, tagIds.size(), pageable);
         }
 
-        return memos.map(memo -> new MemoDTO(memo, tagRepository));
+        return memos.map(memo -> new MemoDTO(memo, tagRepository).clearContent());
     }
 
     @GetMapping("/{id}")
-    public MemoDTO findMemo(@PathVariable String id) {
+    public MemoDTO findMemo(@PathVariable
+                            String channelId, @PathVariable String id) {
         Memo memo = memoService.getMemoById(id);
         return new MemoDTO(memo, tagRepository);
     }
 
-    @PutMapping("/{id}")
-    public Memo updateMemo(@PathVariable String id, @RequestBody Memo user) {
-        return memoService.updateMemo(id, user);
-    }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMemo(@PathVariable String id) {
-        boolean deleted = memoService.deleteMemo(id);
+    public ResponseEntity<Void> deleteMemo(@PathVariable
+                                           String channelId, @PathVariable String id) {
+        boolean deleted = memoService.deleteMemo(channelId, id);
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {

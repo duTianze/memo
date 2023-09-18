@@ -1,15 +1,30 @@
-import { IconStar } from "@tabler/icons-react";
-import { Card, Text, Group, Box, Image } from "@mantine/core";
-import { Carousel } from "@mantine/carousel";
+import { useEffect, useState } from "react";
+import { Card, Text, Group, Box, Image, Rating } from "@mantine/core";
 import useStyles from "./index.styles";
+import { useHover, useInterval } from "@mantine/hooks";
 
-export default function ImageCard({
-    background,
-    title,
-    content,
-    cardClickHanlder,
-}) {
+export default function ImageCard({ memo, cardClickHanlder }) {
     const { classes } = useStyles();
+    const { hovered, ref } = useHover();
+    const [backgroundIndex, setBackgroundIndex] = useState(0);
+    const interval = useInterval(
+        () =>
+            setBackgroundIndex(
+                (current) => (current + 1) % memo.background.length
+            ),
+        500
+    );
+
+    useEffect(() => {
+        if (!hovered || memo.background.length == 1) {
+            return;
+        }
+        interval.start();
+        return () => {
+            interval.stop();
+            setBackgroundIndex(0);
+        };
+    }, [hovered]);
 
     return (
         <Card
@@ -18,37 +33,25 @@ export default function ImageCard({
             padding="sm"
             radius="md"
             shadow="lg"
+            onClick={cardClickHanlder}
         >
-            <Card.Section>
-                <Carousel
-                    withIndicators
-                    loop
-                    classNames={{
-                        root: classes.carousel,
-                        controls: classes.carouselControls,
-                        indicator: classes.carouselIndicator,
-                    }}
-                >
-                    <Carousel.Slide>
-                        <Image src={background} onClick={cardClickHanlder} />
-                    </Carousel.Slide>
-                </Carousel>
+            <Card.Section ref={ref}>
+                <Image src={memo.background[backgroundIndex]} />
             </Card.Section>
 
-            <Box onClick={cardClickHanlder}>
+            <Box>
                 <Group position="apart" mt="lg">
                     <Text weight={500} fz="sm">
-                        {title}
+                        {memo.title}
                     </Text>
 
-                    <Group spacing={5}>
-                        <IconStar size="1rem" />
-                        <Text fz="xs" fw={500}>
-                            4.78
-                        </Text>
+                    <Group spacing={5} position="right">
+                        <Rating value={memo.rate} readOnly />
                     </Group>
                 </Group>
-                <Text fz="sm" c="dimmed" mt="sm"></Text>
+                <Text fz="sm" c="dimmed" mt="sm">
+                    {memo.spoiler}
+                </Text>
             </Box>
         </Card>
     );

@@ -1,16 +1,66 @@
+import { useContext, useState, useEffect } from "react";
 import { Modal, ScrollArea } from "@mantine/core";
 import useStyles from "./index.styles";
 import MemoEditor from "@/components/MemoEditor";
+import GlobalContext from "@/pages/global-context";
 
 export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
     const { classes, theme } = useStyles();
+    const [changCount, setChangCount] = useState(-1);
+
+    const {
+        tags: [tags, setTags],
+        filterTags: [filterTags, setFilterTags],
+        channel: [channelId, setChannelId],
+    } = useContext(GlobalContext);
+
+    useEffect(() => {
+        setChangCount((current) => current + 1);
+    }, [memo.title, memo.background, memo.content, memo.rate, memo.tagIds]);
+
+    const saveMemoHandler = () => {
+        console.log("@@@", changCount);
+        if (changCount < 2 || memo.isDelete) {
+            setChangCount(0);
+            close();
+            return;
+        }
+        fetch(`http://localhost:8080/api/${channelId}/memo`, {
+            method: "POST",
+            headers: {
+                accept: "*/*",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(memo),
+        }).then((response) => {
+            saveAfter();
+            setChangCount(0);
+            close();
+        });
+    };
+
+    const deleteTagHandler = async (name) => {
+        if (memo.id == undefined) {
+            return;
+        }
+        fetch(`http://localhost:8080/api/${channelId}/memo/${memo.id}`, {
+            method: "DELETE",
+            headers: {
+                accept: "*/*",
+            },
+        }).then((result) => {
+            setMemo({ isDelete: true });
+            saveAfter();
+            close();
+        });
+    };
 
     return (
         <Modal
             className={classes.modal}
             size="90%"
             opened={opened}
-            onClose={close}
+            onClose={saveMemoHandler}
             centered
             withCloseButton={false}
             radius="lg"
@@ -21,10 +71,7 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
                 setMemo={setMemo}
                 height={"100%"}
                 width={"100%"}
-                saveAfter={() => {
-                    saveAfter();
-                    close();
-                }}
+                deleteTagHandler={deleteTagHandler}
             />
         </Modal>
     );

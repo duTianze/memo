@@ -30,14 +30,14 @@ public class ChannelController {
     private final MemoTagRepository memoTagRepository;
     private final TagRepository tagRepository;
 
-    private final Channel EMPTY = new Channel("empty", "空频道");
+    public static final Channel TRASH = new Channel("trash", "回收站");
 
     @GetMapping
     public List<Channel> findAll(@ParameterObject
                                  @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                  Sort sort) {
         List<Channel> channels = channelRepository.findAll(sort);
-        channels.add(EMPTY);
+        channels.add(TRASH);
         return channels;
     }
 
@@ -48,8 +48,8 @@ public class ChannelController {
 
     @PutMapping("/{id}")
     public Channel update(@PathVariable String id, @RequestParam String name) {
-        if (EMPTY.getId().equals(id)) {
-            return EMPTY;
+        if (TRASH.getId().equals(id)) {
+            return TRASH;
         }
         channelRepository.findById(id)
                          .orElseThrow(() -> new NoteNotFoundException("Invalid channel ID: " + id));

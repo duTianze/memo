@@ -3,6 +3,9 @@ package io.github.dutianze.memo.controller.dto;
 import io.github.dutianze.memo.entity.Image;
 import io.github.dutianze.memo.entity.Memo;
 import io.github.dutianze.memo.entity.MemoTag;
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,18 +20,29 @@ import java.util.stream.Stream;
 public record MemoSaveCmd(
         String id,
         String title,
-        String background,
         String content,
+        Integer rate,
+        String spoiler,
         List<String> tagIds
-
 ) {
 
     public Memo newMemo(String channelId) {
+        Document parse = Jsoup.parse(this.content);
+        List<String> background = parse.select("img").stream()
+                                       .map(e -> e.attr("src"))
+                                       .map(Image::getId).toList();
+        String wholeText = parse.wholeText();
+        String spoiler = StringUtils.substring(wholeText, 0, 80);
+        if (wholeText.length() > 80) {
+            spoiler += "...";
+        }
         return new Memo(channelId,
                         this.id,
                         this.title,
-                        Image.getId(this.background),
-                        this.content);
+                        background,
+                        this.content,
+                        spoiler,
+                        rate);
     }
 
     public Set<MemoTag> newMemoTags(Memo memo) {

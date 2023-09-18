@@ -24,21 +24,32 @@ public class MemoDTO {
 
     private String title;
 
-    private String background;
+    private List<String> background;
 
     private String content;
+
+    private String spoiler;
+
+    private Integer rate;
 
     private List<String> tagIds;
 
     public MemoDTO(Memo memo, TagRepository tagRepository) {
         this.id = memo.getId();
         this.title = memo.getTitle();
-        this.background = Image.getURL(memo.getBackground());
+        this.background = memo.getBackground().stream().map(Image::getURL).collect(Collectors.toList());
         this.content = memo.getContent();
+        this.spoiler = memo.getSpoiler();
+        this.rate = memo.getRate();
         List<Tag> tags = tagRepository.findByMemoId(memo.getId());
         this.tagIds = Stream.ofNullable(tags)
                             .flatMap(Collection::stream)
                             .map(Tag::getId)
                             .collect(Collectors.toList());
+    }
+
+    public MemoDTO clearContent() {
+        this.content = null;
+        return this;
     }
 }

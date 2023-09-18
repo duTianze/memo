@@ -6,6 +6,7 @@ import {
     Box,
     Space,
     Group,
+    Rating,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
@@ -20,7 +21,7 @@ export default function MemoEditor({
     setMemo,
     height,
     width,
-    saveAfter,
+    deleteTagHandler,
 }) {
     const {
         tags: [tags, setTags],
@@ -30,19 +31,6 @@ export default function MemoEditor({
     const { classes } = useStyles({
         width: width,
     });
-
-    const saveMemoHandler = () => {
-        fetch(`http://localhost:8080/api/${channelId}/memo`, {
-            method: "POST",
-            headers: {
-                accept: "*/*",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(memo),
-        }).then((response) => {
-            saveAfter();
-        });
-    };
 
     const addTagHandler = async (name) => {
         fetch(`http://localhost:8080/api/${channelId}/tag?name=${name}`, {
@@ -63,9 +51,12 @@ export default function MemoEditor({
     return (
         <Box className={classes.editor}>
             <Group position="right">
-                <Button className={classes.control} onClick={saveMemoHandler}>
-                    保存
-                </Button>
+                <Rating
+                    value={memo.rate}
+                    onChange={(value) => {
+                        setMemo({ rate: value });
+                    }}
+                />
             </Group>
 
             <TextInput
@@ -105,6 +96,17 @@ export default function MemoEditor({
             />
 
             <Editor memo={memo} setMemo={setMemo} height={height} />
+
+            <Group position="right">
+                <Button
+                    color="red"
+                    radius="xl"
+                    compact
+                    onClick={deleteTagHandler}
+                >
+                    删除
+                </Button>
+            </Group>
         </Box>
     );
 }

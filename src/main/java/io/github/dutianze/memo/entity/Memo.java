@@ -1,12 +1,15 @@
 package io.github.dutianze.memo.entity;
 
 import io.github.dutianze.memo.entity.common.AuditModel;
+import io.github.dutianze.memo.entity.common.StringListConverter;
 import io.github.dutianze.memo.entity.common.TSIDGenerator;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.List;
 
 /**
  * @author dutianze
@@ -31,16 +34,26 @@ public class Memo extends AuditModel {
     private String title;
 
     @Column(name = "background")
-    private String background;
+    @Convert(converter = StringListConverter.class)
+    private List<String> background;
 
-    @Column
+    @Column(name = "content")
     private String content;
 
-    public Memo(String channelId, String id, String title, String background, String content) {
+    @Column(name = "spoiler")
+    private String spoiler;
+
+    @Column(name = "rate")
+    private Integer rate;
+
+    public Memo(String channelId, String id, String title, List<String> background, String content, String spoiler,
+                Integer rate) {
         this.channelId = channelId;
         this.id = id;
         this.title = title;
         this.background = background;
         this.content = content;
+        this.spoiler = spoiler;
+        this.rate = rate;
     }
 }

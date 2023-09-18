@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.github.dutianze.memo.controller.ChannelController.TRASH;
+
 /**
  * @author dutianze
  * @date 2023/9/5
@@ -33,6 +35,9 @@ public class TagController {
                                             String channelId,
                                             @RequestParam String name) {
         try {
+            if (TRASH.getId().equals(channelId)) {
+                return null;
+            }
             Tag addedTag = tagRepository.save(Tag.of(channelId, name));
             TagRecord tagRecord = new TagRecord(addedTag);
             return ResponseEntity.status(HttpStatus.CREATED).body(tagRecord);

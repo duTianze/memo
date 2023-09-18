@@ -14,7 +14,4 @@ export default createStyles((theme, { width }) => ({
         width: "100%",
         height: "100%",
     },
-    control: {
-        backgroundColor: theme.colors[theme.primaryColor][6],
-    },
 }));

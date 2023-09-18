@@ -99,12 +99,7 @@ function Editor({ memo, setMemo, height }) {
                     "video",
                 ]}
                 onChange={(content, delta, source, editor) => {
-                    const inserted = getImgUrls(delta);
-                    const updatedMemo = { content: content };
-                    if (inserted.length > 0 && memo.background === "") {
-                        updatedMemo.background = inserted[0];
-                    }
-                    setMemo(updatedMemo);
+                    setMemo({ content: content });
                 }}
                 ref={editorRef}
             />
