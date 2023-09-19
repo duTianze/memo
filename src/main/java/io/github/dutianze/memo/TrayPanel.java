@@ -72,7 +72,7 @@ public class TrayPanel {
             try {
                 String hostAddress = getLocalHostLANAddress().getHostAddress();
                 BitMatrix matrix = new MultiFormatWriter().encode(
-                        "http://" + hostAddress + ":1290",
+                        "http://" + hostAddress + ":12190",
                         BarcodeFormat.QR_CODE, 200, 200);
                 BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(matrix);
 
