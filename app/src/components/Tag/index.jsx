@@ -13,7 +13,7 @@ export default function Tag({}) {
     } = useContext(GlobalContext);
 
     useEffect(() => {
-        fetch(`http://localhost:12190/api/${channelId}/tag?tagIds=${tagIds}`)
+        fetch(`/api/${channelId}/tag?tagIds=${tagIds}`)
             .then((response) => response.json())
             .then((result) => {
                 setFilterTags(result);
@@ -21,7 +21,7 @@ export default function Tag({}) {
             .catch((error) => {
                 console.error("Error:", error);
             });
-        fetch(`http://localhost:12190/api/${channelId}/tag`)
+        fetch(`/api/${channelId}/tag`)
             .then((response) => response.json())
             .then((result) => {
                 setTags(result);

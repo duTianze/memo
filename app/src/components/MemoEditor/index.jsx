@@ -7,6 +7,7 @@ import {
     Space,
     Group,
     Rating,
+    Divider,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
@@ -21,7 +22,7 @@ export default function MemoEditor({
     setMemo,
     height,
     width,
-    deleteTagHandler,
+    saveAfter,
 }) {
     const {
         tags: [tags, setTags],
@@ -33,7 +34,7 @@ export default function MemoEditor({
     });
 
     const addTagHandler = async (name) => {
-        fetch(`http://localhost:12190/api/${channelId}/tag?name=${name}`, {
+        fetch(`/api/${channelId}/tag?name=${name}`, {
             method: "POST",
             headers: {
                 accept: "*/*",
@@ -46,6 +47,29 @@ export default function MemoEditor({
                 setFilterTags([...filterTags, result]);
                 setMemo({ tagIds: [...memo.tagIds, result.value] });
             });
+    };
+    const saveMemoHandler = () => {
+        fetch(`/api/${channelId}/memo`, {
+            method: "POST",
+            headers: {
+                accept: "*/*",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(memo),
+        }).then((response) => {
+            saveAfter();
+        });
+    };
+
+    const deleteTagHandler = async (name) => {
+        fetch(`/api/${channelId}/memo/${memo.id}`, {
+            method: "DELETE",
+            headers: {
+                accept: "*/*",
+            },
+        }).then((result) => {
+            saveAfter();
+        });
     };
 
     return (
@@ -96,8 +120,17 @@ export default function MemoEditor({
             />
 
             <Editor memo={memo} setMemo={setMemo} height={height} />
+            <Divider my="sm" />
 
             <Group position="right">
+                <Button
+                    color="indigo"
+                    radius="xl"
+                    compact
+                    onClick={saveMemoHandler}
+                >
+                    保存
+                </Button>
                 <Button
                     color="red"
                     radius="xl"

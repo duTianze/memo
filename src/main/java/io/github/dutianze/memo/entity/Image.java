@@ -13,8 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.unit.DataSize;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URI;
 
 /**
  * @author dutianze
@@ -44,14 +43,14 @@ public class Image extends AuditModel {
     }
 
     public static String getURL(String imageId) {
-        return String.format("%s/api/image/%s", "http://localhost:12190", imageId);
+        return String.format("/api/image/%s", imageId);
     }
 
     public static String getId(String imageUrl) {
         if (StringUtils.isEmpty(imageUrl)) {
             return null;
         }
-        Path path = Paths.get(imageUrl);
-        return path.getFileName().toString();
+        URI uri = URI.create(imageUrl);
+        return StringUtils.substringAfterLast(uri.getPath(), "/");
     }
 }

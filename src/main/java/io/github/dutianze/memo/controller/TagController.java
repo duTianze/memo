@@ -12,10 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.github.dutianze.memo.controller.ChannelController.TRASH;
 
@@ -29,22 +27,6 @@ import static io.github.dutianze.memo.controller.ChannelController.TRASH;
 public class TagController {
 
     private final TagRepository tagRepository;
-
-    @PostMapping
-    public ResponseEntity<TagRecord> addTag(@PathVariable
-                                            String channelId,
-                                            @RequestParam String name) {
-        try {
-            if (TRASH.getId().equals(channelId)) {
-                return null;
-            }
-            Tag addedTag = tagRepository.save(Tag.of(channelId, name));
-            TagRecord tagRecord = new TagRecord(addedTag);
-            return ResponseEntity.status(HttpStatus.CREATED).body(tagRecord);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
 
     @GetMapping
     public List<TagRecord> findAll(@PathVariable
@@ -61,9 +43,28 @@ public class TagController {
             tags = tagRepository.findByTagIds(channelId, tagIds, tagIds.size(), sort);
         }
 
-        return Stream.ofNullable(tags)
-                     .flatMap(Collection::stream)
-                     .map(TagRecord::new)
-                     .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(tags) && CollectionUtils.isNotEmpty(tagIds)) {
+            tags = tagRepository.findAllById(tagIds);
+        }
+
+        return tags.stream()
+                   .map(TagRecord::new)
+                   .collect(Collectors.toList());
+    }
+
+    @PostMapping
+    public ResponseEntity<TagRecord> addTag(@PathVariable
+                                            String channelId,
+                                            @RequestParam String name) {
+        try {
+            if (TRASH.getId().equals(channelId)) {
+                return null;
+            }
+            Tag addedTag = tagRepository.save(Tag.of(channelId, name));
+            TagRecord tagRecord = new TagRecord(addedTag);
+            return ResponseEntity.status(HttpStatus.CREATED).body(tagRecord);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }
