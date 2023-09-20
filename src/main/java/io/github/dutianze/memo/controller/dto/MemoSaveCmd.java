@@ -30,10 +30,11 @@ public record MemoSaveCmd(
         Document parse = Jsoup.parse(this.content);
         List<String> background = parse.select("img").stream()
                                        .map(e -> e.attr("src"))
-                                       .map(Image::getId).toList();
+                                       .map(Image::getId)
+                                       .toList();
         String wholeText = parse.wholeText();
-        String spoiler = StringUtils.substring(wholeText, 0, 80);
-        if (wholeText.length() > 80) {
+        String spoiler = StringUtils.substring(wholeText, 0, 140);
+        if (wholeText.length() > 140) {
             spoiler += "...";
         }
         return new Memo(channelId,

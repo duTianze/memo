@@ -96,10 +96,10 @@ public class TrayPanel {
     }
 
     protected static Image createImage() {
-        URL imageURL = TrayPanel.class.getResource("/image/bulb.gif");
+        URL imageURL = TrayPanel.class.getResource("/image/edit.png");
 
         if (imageURL == null) {
-            System.err.println("Resource not found: " + "/image/bulb.gif");
+            System.err.println("Resource not found: ");
             return null;
         } else {
             return (new ImageIcon(imageURL, "tray icon")).getImage();

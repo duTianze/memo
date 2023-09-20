@@ -74,13 +74,30 @@ export default function MemoEditor({
 
     return (
         <Box className={classes.editor}>
-            <Group position="right">
+            <Group
+                position="right"
+                style={{
+                    position: "sticky",
+                    top: 0,
+                    height: "30px",
+                    zIndex: 100,
+                    backgroundColor: "white",
+                }}
+            >
                 <Rating
                     value={memo.rate}
                     onChange={(value) => {
                         setMemo({ rate: value });
                     }}
                 />
+                <Button
+                    color="indigo"
+                    radius="xl"
+                    compact
+                    onClick={saveMemoHandler}
+                >
+                    保存
+                </Button>
             </Group>
 
             <TextInput
@@ -123,14 +140,6 @@ export default function MemoEditor({
             <Divider my="sm" />
 
             <Group position="right">
-                <Button
-                    color="indigo"
-                    radius="xl"
-                    compact
-                    onClick={saveMemoHandler}
-                >
-                    保存
-                </Button>
                 <Button
                     color="red"
                     radius="xl"

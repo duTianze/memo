@@ -7,6 +7,30 @@ import "react-quill/dist/quill.snow.css";
 window.Quill = Quill;
 Quill.register("modules/imageUploader", ImageUploader);
 Quill.register("modules/imageResize", ImageResize);
+const BaseImageFormat = Quill.import("formats/image");
+const ImageFormatAttributesList = ["alt", "height", "width", "style"];
+class ImageFormat extends BaseImageFormat {
+    static formats(domNode) {
+        return ImageFormatAttributesList.reduce(function (formats, attribute) {
+            if (domNode.hasAttribute(attribute)) {
+                formats[attribute] = domNode.getAttribute(attribute);
+            }
+            return formats;
+        }, {});
+    }
+    format(name, value) {
+        if (ImageFormatAttributesList.indexOf(name) > -1) {
+            if (value) {
+                this.domNode.setAttribute(name, value);
+            } else {
+                this.domNode.removeAttribute(name);
+            }
+        } else {
+            super.format(name, value);
+        }
+    }
+}
+Quill.register(ImageFormat, true);
 
 const useStyles = createStyles((theme, { height }) => {
     return {
@@ -30,12 +54,14 @@ function Editor({ memo, setMemo, height }) {
                 [{ size: [] }],
                 ["bold", "italic", "underline", "strike", "blockquote"],
                 [
+                    { list: "check" },
                     { list: "ordered" },
                     { list: "bullet" },
                     { indent: "-1" },
                     { indent: "+1" },
                 ],
-                ["link", "image", "video"],
+                ["code-block"],
+                [("link", "image", "video")],
                 ["clean"],
             ],
             imageResize: {
@@ -97,6 +123,11 @@ function Editor({ memo, setMemo, height }) {
                     "link",
                     "image",
                     "video",
+                    "code-block",
+                    "alt",
+                    "height",
+                    "width",
+                    "style",
                 ]}
                 onChange={(content, delta, source, editor) => {
                     setMemo({ content: content });

@@ -6,9 +6,6 @@
     "/Users/dutianze/project/memo/target/memo-0.0.1-SNAPSHOT.jar"
   ],
   "mainclass": "org.springframework.boot.loader.JarLauncher",
-  "vmargs": [
-    "Xmx100m"
-  ],
   "minimizejre": "hard",
   "output": "memo-mac"
 }

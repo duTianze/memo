@@ -25,11 +25,25 @@ body {
 .ql-toolbar {
     position: sticky;
     background-color: white;
-    top: 0;
+    top: 30px;
     z-index: 20;
     border: none !important;
 }
 
 .ql-container.ql-snow {
     border: none !important;
+}
+
+.ql-editor ul[data-checked="true"] > li::before {
+    content: "☑" !important;
+    scale: 1.5;
+}
+
+.ql-editor ul[data-checked="false"] > li::before {
+    content: "☐" !important;
+    scale: 1.5;
+}
+
+.ql-editor ul[data-checked="true"] > li {
+    text-decoration: line-through !important;
 }
