@@ -15,5 +15,6 @@ spring:
     driver-class-name: org.sqlite.JDBC
   servlet:
     multipart:
-      max-file-size: 30MB
-      max-request-size: 30MB
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB

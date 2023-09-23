@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
-import { px, createStyles } from "@mantine/core";
+import { useRef, useMemo } from "react";
 import ImageResize from "quill-image-resize-module-react";
 import ImageUploader from "quill-image-uploader";
 import ReactQuill, { Quill } from "react-quill";
@@ -32,19 +31,7 @@ class ImageFormat extends BaseImageFormat {
 }
 Quill.register(ImageFormat, true);
 
-const useStyles = createStyles((theme, { height }) => {
-    return {
-        textEdit: {
-            height: `${height}`,
-            width: "100%",
-            margin: "16px 0",
-            minHeight: "300px",
-        },
-    };
-});
-
-function Editor({ memo, setMemo, height }) {
-    const { classes } = useStyles({ height });
+function Editor({ memo, setMemo }) {
     const editorRef = useRef();
 
     const modules = useMemo(
@@ -64,6 +51,9 @@ function Editor({ memo, setMemo, height }) {
                 [("link", "image", "video")],
                 ["clean"],
             ],
+            clipboard: {
+                matchVisual: false,
+            },
             imageResize: {
                 parchment: Quill.import("parchment"),
                 modules: ["Resize", "DisplaySize", "Toolbar"],
@@ -102,39 +92,58 @@ function Editor({ memo, setMemo, height }) {
             .map((i) => i.insert.image);
     }
 
+    function getScrollParent(node) {
+        if (!node) {
+            return document.documentElement;
+        }
+
+        const overflowY =
+            (node instanceof HTMLElement &&
+                window.getComputedStyle(node).overflowY) ||
+            "";
+        const isScrollable = !(
+            overflowY.includes("hidden") || overflowY.includes("visible")
+        );
+
+        if (isScrollable && node.scrollHeight >= node.clientHeight) {
+            return node;
+        }
+
+        return getScrollParent(node.parentNode);
+    }
+
     return (
-        <div className={classes.textEdit}>
-            <ReactQuill
-                theme="snow"
-                value={memo.content}
-                modules={modules}
-                formats={[
-                    "header",
-                    "font",
-                    "size",
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strike",
-                    "blockquote",
-                    "list",
-                    "bullet",
-                    "indent",
-                    "link",
-                    "image",
-                    "video",
-                    "code-block",
-                    "alt",
-                    "height",
-                    "width",
-                    "style",
-                ]}
-                onChange={(content, delta, source, editor) => {
-                    setMemo({ content: content });
-                }}
-                ref={editorRef}
-            />
-        </div>
+        <ReactQuill
+            theme="snow"
+            value={memo.content}
+            modules={modules}
+            formats={[
+                "header",
+                "font",
+                "size",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "blockquote",
+                "list",
+                "bullet",
+                "indent",
+                "link",
+                "image",
+                "video",
+                "code-block",
+                "alt",
+                "height",
+                "width",
+                "style",
+            ]}
+            onChange={(content, delta, source, editor) => {
+                setMemo({ content: content });
+            }}
+            ref={editorRef}
+            scrollingContainer=".mantine-ScrollArea-viewport"
+        />
     );
 }
 

@@ -27,8 +27,6 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
             <MemoEditor
                 memo={memo}
                 setMemo={setMemo}
-                height={"100%"}
-                width={"100%"}
                 saveAfter={() => {
                     saveAfter();
                     close();

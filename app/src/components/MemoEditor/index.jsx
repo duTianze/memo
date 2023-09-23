@@ -17,21 +17,13 @@ const Editor = dynamic(import("@/components/MemoEditor/Editor"), {
     ssr: false,
 });
 
-export default function MemoEditor({
-    memo,
-    setMemo,
-    height,
-    width,
-    saveAfter,
-}) {
+export default function MemoEditor({ memo, setMemo, saveAfter }) {
     const {
         tags: [tags, setTags],
         filterTags: [filterTags, setFilterTags],
         channel: [channelId, setChannelId],
     } = useContext(GlobalContext);
-    const { classes } = useStyles({
-        width: width,
-    });
+    const { classes } = useStyles();
 
     const addTagHandler = async (name) => {
         fetch(`/api/${channelId}/tag?name=${name}`, {
@@ -136,7 +128,7 @@ export default function MemoEditor({
                 }}
             />
 
-            <Editor memo={memo} setMemo={setMemo} height={height} />
+            <Editor memo={memo} setMemo={setMemo} />
             <Divider my="sm" />
 
             <Group position="right">

@@ -35,15 +35,22 @@ body {
 }
 
 .ql-editor ul[data-checked="true"] > li::before {
-    content: "☑" !important;
-    scale: 1.5;
+    content: "✅" !important;
+    scale: 1.2;
 }
 
 .ql-editor ul[data-checked="false"] > li::before {
-    content: "☐" !important;
-    scale: 1.5;
+    content: "🎯" !important;
+    scale: 1.2;
 }
 
 .ql-editor ul[data-checked="true"] > li {
     text-decoration: line-through !important;
+}
+
+.ql-clipboard {
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    opacity: 0;
 }

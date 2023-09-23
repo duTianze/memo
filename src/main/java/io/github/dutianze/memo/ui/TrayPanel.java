@@ -1,4 +1,4 @@
-package io.github.dutianze.memo;
+package io.github.dutianze.memo.ui;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -8,13 +8,16 @@ import com.google.zxing.common.BitMatrix;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.io.File;
+import java.io.IOException;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Objects;
 
@@ -26,7 +29,9 @@ import java.util.Objects;
 @Component
 public class TrayPanel {
 
-    public TrayPanel() {
+    private JFileChooser fc;
+
+    public TrayPanel() throws IOException {
         //Check the SystemTray is supported
         if (!SystemTray.isSupported()) {
             log.info("SystemTray is not supported");
@@ -34,19 +39,23 @@ public class TrayPanel {
         }
 
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon =
-                new TrayIcon(Objects.requireNonNull(createImage()));
+        BufferedImage trayIconImage =
+                ImageIO.read(Objects.requireNonNull(TrayPanel.class.getResource("/image/edit.png")));
+        int trayIconWidth = new TrayIcon(trayIconImage).getSize().width;
+        TrayIcon trayIcon = new TrayIcon(trayIconImage.getScaledInstance(trayIconWidth, -1, Image.SCALE_SMOOTH));
         final SystemTray tray = SystemTray.getSystemTray();
 
-        // Create a pop-up menu components
-        MenuItem openItem = new MenuItem("打开应用");
-        MenuItem phoneItem = new MenuItem("从手机打开");
-        MenuItem exitItem = new MenuItem("退出");
+        MenuItem openItem = new MenuItem("open");
+        MenuItem phoneItem = new MenuItem("open from mobile");
+        MenuItem openFile = new MenuItem("open file");
+        MenuItem exitItem = new MenuItem("exit");
 
         //Add components to pop-up menu
         popup.add(openItem);
         popup.addSeparator();
         popup.add(phoneItem);
+        popup.addSeparator();
+        popup.add(openFile);
         popup.addSeparator();
         popup.add(exitItem);
         trayIcon.setPopupMenu(popup);
@@ -89,21 +98,27 @@ public class TrayPanel {
                 throw new RuntimeException(ex);
             }
         });
+        openFile.addActionListener(e -> {
+            if (fc == null) {
+                fc = new JFileChooser();
+                fc.setAcceptAllFileFilterUsed(true);
+            }
+
+            int returnVal = fc.showDialog(null, "生成url");
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                StringSelection stringSelection = new StringSelection(
+                        String.format("/api/video?filepath=%s", URLEncoder.encode(
+                                file.getAbsolutePath(), StandardCharsets.UTF_8)));
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
+            }
+            fc.setSelectedFile(null);
+        });
         exitItem.addActionListener(e -> {
             tray.remove(trayIcon);
             System.exit(0);
         });
-    }
-
-    protected static Image createImage() {
-        URL imageURL = TrayPanel.class.getResource("/image/edit.png");
-
-        if (imageURL == null) {
-            System.err.println("Resource not found: ");
-            return null;
-        } else {
-            return (new ImageIcon(imageURL, "tray icon")).getImage();
-        }
     }
 
 

@@ -1,9 +1,9 @@
 import { createStyles, rem } from "@mantine/core";
 
-export default createStyles((theme, { width }) => ({
+export default createStyles((theme) => ({
     editor: {
         backgroundColor: "theme.white",
-        width: width,
+        width: "100%",
     },
     content: {
         padding: 0,
