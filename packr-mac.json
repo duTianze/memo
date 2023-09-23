@@ -7,5 +7,6 @@
   ],
   "mainclass": "org.springframework.boot.loader.JarLauncher",
   "minimizejre": "hard",
+  "useZgcIfSupportedOs": true,
   "output": "memo-mac"
 }

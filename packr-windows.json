@@ -10,5 +10,6 @@
     "Xmx100m"
   ],
   "minimizejre": "hard",
+  "useZgcIfSupportedOs": true,
   "output": "memo-windows"
 }
