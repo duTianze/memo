@@ -5,6 +5,7 @@ import {
     useDisclosure,
     useSetState,
     useWindowEvent,
+    useElementSize,
 } from "@mantine/hooks";
 import ImageCard from "@/components/ImageCard";
 import MemoModal from "@/components/MemoModal";
@@ -16,7 +17,8 @@ export default function HomePage() {
     const [memos, memosHandler] = useListState([]);
     const [page, setPage] = useState(0);
     const [last, steLast] = useState(false);
-    const { classes } = useStyles();
+    const [column, setColumn] = useState(5);
+    const { classes } = useStyles({ column });
     const {
         tagId: [tagIds, setTagIds],
         channel: [channelId, setChannelId],
@@ -25,7 +27,7 @@ export default function HomePage() {
     const [opened, { open, close }] = useDisclosure(false);
     const [memo, setMemo] = useSetState({});
     const [memoGroup, setMemoGroup] = useState([]);
-    const [column, setColumn] = useState(5);
+    const { ref, width, height } = useElementSize();
 
     const resizeHandler = () => {
         if (window.innerWidth <= 576) {
@@ -114,13 +116,18 @@ export default function HomePage() {
             <div className={classes.tagNav}>
                 <Tag />
             </div>
-            <Box className={classes.scrollArea} onScroll={handleScroll}>
+            <Box
+                ref={ref}
+                className={classes.scrollArea}
+                onScroll={handleScroll}
+            >
                 {memoGroup.map((group, index) => (
                     <div key={index} className={classes.memoGroup}>
                         {group.map((memo) => (
                             <ImageCard
                                 key={memo.id}
                                 memo={memo}
+                                width={width / column - 8}
                                 cardClickHanlder={() =>
                                     cardClickHanlder(memo.id)
                                 }

@@ -1,6 +1,6 @@
 import { createStyles, rem } from "@mantine/core";
 
-export default createStyles((theme) => ({
+export default createStyles((theme, { column }) => ({
     main: {
         display: "flex",
         flexDirection: "row",
@@ -19,9 +19,7 @@ export default createStyles((theme) => ({
         },
     },
     scrollArea: {
-        flexGrow: 1,
-        flexShrink: 2,
-        flexBasis: "auto",
+        flex: "1 2 auto",
         overflowY: "scroll",
         overflowX: "hidden",
         height: "auto",
@@ -31,17 +29,17 @@ export default createStyles((theme) => ({
         display: "flex",
         flexWrap: "nowrap",
         flexDirection: "row",
-        justifyContent: "start",
-        alignItems: "stretch",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
     },
     memoGroup: {
+        flex: `1 1 calc(100% / ${column})`,
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "row",
-        justifyContent: "start",
-        alignItems: "stretch",
-        alignContent: "start",
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
         margin: "4px",
-        maxWidth: "500px",
+        maxWidth: `500px`,
     },
 }));

@@ -3,8 +3,8 @@ import { Card, Text, Group, Box, Image, Rating } from "@mantine/core";
 import useStyles from "./index.styles";
 import { useHover, useInterval } from "@mantine/hooks";
 
-export default function ImageCard({ memo, cardClickHanlder }) {
-    const { classes } = useStyles();
+export default function ImageCard({ memo, width, cardClickHanlder }) {
+    const { classes } = useStyles({ width });
     const { hovered, ref } = useHover();
     const [backgroundIndex, setBackgroundIndex] = useState(0);
     const interval = useInterval(

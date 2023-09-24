@@ -1,7 +1,9 @@
 import { createStyles, getStylesRef, rem, px } from "@mantine/core";
 
-export default createStyles((theme) => ({
+export default createStyles((theme, { width }) => ({
     card: {
+        width: `${width}px`,
+        flex: `1 0 auto`,
         backgroundColor: theme.colors.gray[0],
         marginBottom: "4px",
         cursor: "pointer",

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Chip } from "@mantine/core";
+import { Chip, ScrollArea } from "@mantine/core";
 import useStyles from "./index.styles";
 import GlobalContext from "@/components/GlobalContext";
 
@@ -32,24 +32,26 @@ export default function Tag({}) {
     }, [channelId, tagIds]);
 
     return (
-        <Chip.Group
-            className={classes.main}
-            multiple
-            value={tagIds}
-            onChange={setTagIds}
-        >
-            <div className={classes.content}>
-                {filterTags.map((tag) => (
-                    <Chip
-                        className={classes.chip}
-                        key={tag.value}
-                        value={tag.value}
-                        size="xs"
-                    >
-                        {tag.label}
-                    </Chip>
-                ))}
-            </div>
-        </Chip.Group>
+        <ScrollArea h={"calc(100vh - 50px)"}>
+            <Chip.Group
+                className={classes.main}
+                multiple
+                value={tagIds}
+                onChange={setTagIds}
+            >
+                <div className={classes.content}>
+                    {filterTags.map((tag) => (
+                        <Chip
+                            className={classes.chip}
+                            key={tag.value}
+                            value={tag.value}
+                            size="xs"
+                        >
+                            {tag.label}
+                        </Chip>
+                    ))}
+                </div>
+            </Chip.Group>
+        </ScrollArea>
     );
 }
