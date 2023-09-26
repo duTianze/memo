@@ -49,8 +49,9 @@ body {
 }
 
 .ql-clipboard {
-    display: none;
+    display: none !important;
     position: fixed !important;
     left: 50% !important;
     top: 50% !important;
+    opacity: 0 !important;
 }
