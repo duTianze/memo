@@ -7,7 +7,7 @@ import {
     Space,
     Group,
     Rating,
-    Divider,
+    Popover,
 } from "@mantine/core";
 import dynamic from "next/dynamic";
 import useStyles from "./index.styles";
@@ -82,6 +82,24 @@ export default function MemoEditor({ memo, setMemo, saveAfter }) {
                         setMemo({ rate: value });
                     }}
                 />
+                <Popover position="bottom" withArrow shadow="md">
+                    <Popover.Target>
+                        <Button color="red" radius="xl" compact>
+                            删除
+                        </Button>
+                    </Popover.Target>
+                    <Popover.Dropdown>
+                        <Button
+                            color="red"
+                            radius="xl"
+                            compact
+                            onClick={deleteTagHandler}
+                        >
+                            确定删除
+                        </Button>
+                    </Popover.Dropdown>
+                </Popover>
+
                 <Button
                     color="indigo"
                     radius="xl"
@@ -129,18 +147,6 @@ export default function MemoEditor({ memo, setMemo, saveAfter }) {
             />
 
             <Editor memo={memo} setMemo={setMemo} />
-            <Divider my="sm" />
-
-            <Group position="right">
-                <Button
-                    color="red"
-                    radius="xl"
-                    compact
-                    onClick={deleteTagHandler}
-                >
-                    删除
-                </Button>
-            </Group>
         </Box>
     );
 }

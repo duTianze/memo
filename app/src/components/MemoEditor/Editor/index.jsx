@@ -142,7 +142,6 @@ function Editor({ memo, setMemo }) {
                 setMemo({ content: content });
             }}
             ref={editorRef}
-            scrollingContainer=".mantine-ScrollArea-viewport"
         />
     );
 }

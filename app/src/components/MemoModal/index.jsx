@@ -16,7 +16,7 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
     return (
         <Modal
             className={classes.modal}
-            size="90%"
+            size="100%"
             opened={opened}
             onClose={close}
             centered
