@@ -5,13 +5,4 @@ export default createStyles((theme) => ({
         backgroundColor: "theme.white",
         width: "100%",
     },
-    content: {
-        padding: 0,
-        width: "100%",
-        height: "100%",
-    },
-    contentGrid: {
-        width: "100%",
-        height: "100%",
-    },
 }));

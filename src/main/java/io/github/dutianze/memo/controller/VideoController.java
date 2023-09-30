@@ -1,7 +1,8 @@
 package io.github.dutianze.memo.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,7 @@ public class VideoController {
     @GetMapping
     public ResponseEntity<ResourceRegion> getVideo(@RequestHeader HttpHeaders headers, @RequestParam String filepath)
             throws Exception {
-        Path path = Paths.get(filepath);
-        UrlResource video = new UrlResource(path.toUri());
+        FileSystemResource video = new FileSystemResource(Paths.get(filepath));
         ResourceRegion region = resourceRegion(video, headers);
         return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                              .contentType(
@@ -52,16 +52,16 @@ public class VideoController {
         return result;
     }
 
-    private ResourceRegion resourceRegion(UrlResource video, HttpHeaders headers) throws Exception {
+    private ResourceRegion resourceRegion(Resource video, HttpHeaders headers) throws Exception {
         long contentLength = video.contentLength();
         Optional<HttpRange> range = headers.getRange().stream().findFirst();
         if (range.isPresent()) {
             long start = range.get().getRangeStart(contentLength);
             long end = range.get().getRangeEnd(contentLength);
-            long rangeLength = Math.min(2 * 1024 * 1024, end - start + 1);
+            long rangeLength = Math.min(1024 * 1024, end - start + 1);
             return new ResourceRegion(video, start, rangeLength);
         } else {
-            long rangeLength = Math.min(2 * 1024 * 1024, contentLength);
+            long rangeLength = Math.min(1024 * 1024, contentLength);
             return new ResourceRegion(video, 0, rangeLength);
         }
     }

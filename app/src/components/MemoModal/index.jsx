@@ -16,13 +16,24 @@ export default function MemoModal({ opened, close, memo, setMemo, saveAfter }) {
     return (
         <Modal
             className={classes.modal}
-            size="100%"
+            size="90%"
             opened={opened}
             onClose={close}
             centered
             withCloseButton={false}
             radius="lg"
-            scrollAreaComponent={ScrollArea.Autosize}
+            styles={{
+                content: {
+                    overflowY: "hidden !important",
+                    maxHeight: "calc(100vh - 8px) !important",
+                },
+                inner: {
+                    paddingTop: "4px !important",
+                    paddingBottom: "4px !important",
+                    paddingLeft: "0 !important",
+                    paddingRight: "0 !important",
+                },
+            }}
         >
             <MemoEditor
                 memo={memo}

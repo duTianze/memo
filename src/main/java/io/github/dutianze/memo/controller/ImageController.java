@@ -31,7 +31,7 @@ public class ImageController {
             throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         Thumbnails.of(file.getInputStream())
-                  .size(800, 800)
+                  .size(1200, 1200)
                   .outputFormat(MediaType.IMAGE_PNG.getSubtype())
                   .toOutputStream(os);
         Image image = new Image(os.toByteArray());

@@ -31,7 +31,7 @@ class ImageFormat extends BaseImageFormat {
 }
 Quill.register(ImageFormat, true);
 
-function Editor({ memo, setMemo }) {
+function Editor({ headerHeight, memo, setMemo }) {
     const editorRef = useRef();
 
     const modules = useMemo(
@@ -141,8 +141,12 @@ function Editor({ memo, setMemo }) {
             onChange={(content, delta, source, editor) => {
                 setMemo({ content: content });
             }}
+            style={{
+                width: "100%",
+                height: `calc(100vh - 64px - ${headerHeight}px)`,
+                paddingBottom: "32px",
+            }}
             ref={editorRef}
-            scrollingContainer="html"
         />
     );
 }
