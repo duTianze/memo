@@ -48,7 +48,7 @@ function Editor({ headerHeight, memo, setMemo }) {
                     { indent: "+1" },
                 ],
                 ["code-block"],
-                [("link", "image", "video")],
+                ["link", "image", "video"],
                 ["clean"],
             ],
             clipboard: {
